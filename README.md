@@ -74,8 +74,13 @@ ENV_PLACE_SECRET_KEY=["app_secret_key","app_secret_key2"]
 >>>>>>> 521a14b (Scuffed multi account support)
 ENV_DRAW_X_START="x_position_start_integer"
 ENV_DRAW_Y_START="y_position_start_integer"
+<<<<<<< HEAD
 ENV_R_START='["0"]'
 ENV_C_START='["0"]'
+=======
+ENV_R_START="0"
+ENV_C_START="0"
+>>>>>>> 5ce334c (Add ability to specify starting row and starting column for image to draw from)
 ```
 
 <<<<<<< HEAD
