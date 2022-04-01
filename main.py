@@ -46,7 +46,7 @@ def rgb_to_hex(rgb):
 def closest_color(target_rgb, rgb_colors_array_in):
     r, g, b, a = target_rgb
     print(r,g,b,a)
-    if a < 255:
+    if a < 255 or (r,g,b) == (69,42,0):
         return (69,42,0)
     color_diffs = []
     for color in rgb_colors_array_in:
@@ -194,7 +194,8 @@ def get_unset_pixel(img):
         target_rgb = pix[x, y]
         new_rgb = closest_color(target_rgb, rgb_colors_array)
         if pix2[x,y] != new_rgb:
-            if new_rgb != (69,42,0,255):
+            print(new_rgb,new_rgb != (69,42,0))
+            if new_rgb != (69,42,0):
                 print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
                 break;
             else:
@@ -242,7 +243,7 @@ while True:
         print("received new access token: ", access_token)
 
     # draw pixel onto screen
-    if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
+    if True: #access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
         # get current pixel position from input image
         r, c = get_unset_pixel(get_board(access_token))
 
