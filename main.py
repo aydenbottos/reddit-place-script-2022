@@ -24,6 +24,7 @@ import random
 # set verbose mode to increase output (messy)
 verbose_mode = False
 
+<<<<<<< HEAD
 if os.path.exists("./.env"):
     # load env variables
     load_dotenv()
@@ -46,6 +47,8 @@ ENV_C_START='["0"]\'"""
     )
     exit("Error: No .env file found")
 
+=======
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 # map of colors for pixels you can place
 color_map = {
     "#FF4500": 2,  # bright red
@@ -67,6 +70,7 @@ color_map = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # map of pixel color ids to verbose name (for debugging)
 name_map = {
     2: "Bright Red",
@@ -87,18 +91,27 @@ name_map = {
     31: "White",
 }
 
+=======
+=======
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 # color palette
 rgb_colors_array = []
 
 # auth variables
+<<<<<<< HEAD
 access_tokens = []
 access_token_expires_at_timestamp = []
+=======
+access_token = None
+access_token_expires_at_timestamp = math.floor(time.time())
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 
 # image.jpg information
 pix = None
 image_width = None
 image_height = None
 
+<<<<<<< HEAD
 # place a pixel immediately
 # first_run = True
 first_run_counter = 0
@@ -106,10 +119,16 @@ first_run_counter = 0
 # function to convert rgb tuple to hexadecimal string
 =======
 >>>>>>> 131f6a3 (a just in case error thing)
+=======
+
+# function to convert rgb tuple to hexadecimal string
+>>>>>>> 6683491 (Split code into functions for multithreading)
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 def rgb_to_hex(rgb):
     return ("#%02x%02x%02x" % rgb).upper()
 
 
+<<<<<<< HEAD
 # Get a more verbose color indicator from a pixel color ID
 def color_id_to_name(color_id):
     if color_id in name_map.keys():
@@ -117,6 +136,8 @@ def color_id_to_name(color_id):
     return "Invalid Color ({})".format(str(color_id))
 
 
+=======
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 # function to find the closest rgb color from palette to a target rgb color
 def closest_color(target_rgb, rgb_colors_array_in):
     r, g, b, a = target_rgb
@@ -132,7 +153,10 @@ def closest_color(target_rgb, rgb_colors_array_in):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 rgb_colors_array = []
 
 for color_hex, color_index in color_map.items():
@@ -270,7 +294,15 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
     global error_count
     global error_limit
     print("placing pixel")
+<<<<<<< HEAD
 >>>>>>> 2191e27 (mroe just in case stuff, as well as updated readme slightly)
+=======
+=======
+# method to draw a pixel at an x, y coordinate in r/place with a specific color
+def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
+    print("placing pixel with color index " + str(color_index_in) + " at " + str((x, y)))
+>>>>>>> 6683491 (Split code into functions for multithreading)
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 
     url = "https://gql-realtime-2.reddit.com/query"
 
@@ -403,6 +435,7 @@ def get_unset_pixel(img):
     return x,y
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def get_board(access_token_in):
     print("Getting board")
     ws = create_connection(
@@ -490,7 +523,13 @@ def get_unset_pixel(boardimg, x, y):
 # current pixel row and pixel column being drawn
 current_r = 0
 current_c = 0
+=======
+# method to define the color palette array
+def init_rgb_colors_array():
+    global rgb_colors_array
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # loop to keep refreshing tokens when necessary and to draw pixels when the time is right
 while True:
@@ -885,78 +924,159 @@ for i in range(num_credentials):
 =======
 # whether image should keep drawing itself
 repeat_forever = True
+=======
+    # generate array of available rgb colors we can use
+    for color_hex, color_index in color_map.items():
+        rgb_array = ImageColor.getcolor(color_hex, "RGB")
+        rgb_colors_array.append(rgb_array)
+>>>>>>> 6683491 (Split code into functions for multithreading)
 
-# string for time until next pixel is drawn
-update_str = ""
+    print("available colors for palette (rgb): ", rgb_colors_array)
 
-# loop to keep refreshing tokens when necessary and to draw pixels when the time is right
-while True:
+
+# method to read the input image.jpg file
+def load_image():
+    global pix
+    global image_width
+    global image_height
+    # read and load the image to draw and get its dimensions
+    image_path = os.path.join(os.path.abspath(os.getcwd()), 'image.jpg')
+    im = Image.open(image_path)
+    pix = im.load()
+    print("image size: ", im.size)  # Get the width and height of the image for iterating over
+    image_width, image_height = im.size
+
+
+# task to draw the input image
+def task():
+    # whether image should keep drawing itself
+    repeat_forever = True
+
     while True:
-        current_timestamp = math.floor(time.time())
-
-        # log next time until drawing
-        time_until_next_draw = last_time_placed_pixel + pixel_place_frequency - current_timestamp
-        new_update_str = str(time_until_next_draw) + " seconds until next pixel is drawn"
-        if update_str != new_update_str:
-            update_str = new_update_str
-            print(update_str)
-
-        # refresh access token if necessary
-        if access_token is None or current_timestamp >= expires_at_timestamp:
-            print("refreshing access token...")
-
-            data = {
-                'grant_type': 'password',
-                'username': username,
-                'password': password
-            }
-
-            r = requests.post("https://ssl.reddit.com/api/v1/access_token",
-                              data=data,
-                              auth=HTTPBasicAuth(app_client_id, secret_key))
-
-            print("received response: ", r.text)
-
-            response_data = r.json()
-
-            access_token = response_data["access_token"]
-            access_token_type = response_data["token_type"]  # this is just "bearer"
-            access_token_expires_in_seconds = response_data["expires_in"]  # this is usually "3600"
-            access_token_scope = response_data["scope"]  # this is usually "*"
-
-            # ts stores the time in seconds
-            expires_at_timestamp = current_timestamp + int(access_token_expires_in_seconds)
-
-            print("received new access token: ", access_token)
-
-        # draw pixel onto screen
-        if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
-            # get current pixel position from input image
-            r = current_r
-            c = current_c
-
-            # get converted color
-            new_rgb = closest_color(target_rgb, rgb_colors_array)
-            new_rgb_hex = rgb_to_hex(new_rgb)
-            pixel_color_index = color_map[new_rgb_hex]
-
-            # draw the pixel onto r/place
-            set_pixel(access_token, pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+        try:
+            # global variables for script
             last_time_placed_pixel = math.floor(time.time())
 
-            current_r += 1
-            current_c += 1
+            # note: reddit limits us to place 1 pixel every 5 minutes, so I am setting it to
+            # 5 minutes and 30 seconds per pixel
+            pixel_place_frequency = 330
 
-            # go back to first column when reached end of a row while drawing
-            if current_r >= image_width:
-                current_r = 0
+            # pixel drawing preferences
+            pixel_x_start = int(os.getenv('ENV_DRAW_X_START'))
+            pixel_y_start = int(os.getenv('ENV_DRAW_Y_START'))
 
-            # exit when all pixels drawn
-            if current_c >= image_height:
-                print("done drawing image to r/place")
-                break
+            # current pixel row and pixel column being drawn
+            current_r = int(os.getenv('ENV_R_START'))
+            current_c = int(os.getenv('ENV_C_START'))
 
+<<<<<<< HEAD
     if not repeat_forever:
         break
 >>>>>>> d5a279b (Added ability for image to keep redrawing itself)
+<<<<<<< HEAD
 >>>>>>> c000d57 (Added ability for image to keep redrawing itself)
+=======
+=======
+            # string for time until next pixel is drawn
+            update_str = ""
+
+            # reference to globally shared variables such as auth token and image
+            global access_token
+            global access_token_expires_at_timestamp
+
+            # refresh auth tokens and / or draw a pixel
+            while True:
+                # get the current time
+                current_timestamp = math.floor(time.time())
+
+                # log next time until drawing
+                time_until_next_draw = last_time_placed_pixel + pixel_place_frequency - current_timestamp
+                new_update_str = str(time_until_next_draw) + " seconds until next pixel is drawn"
+                if update_str != new_update_str:
+                    update_str = new_update_str
+                    print(update_str)
+
+                # refresh access token if necessary
+                if access_token is None or current_timestamp >= access_token_expires_at_timestamp:
+                    print("__________________")
+                    print("refreshing access token...")
+
+                    # developer's reddit username and password
+                    username = os.getenv('ENV_PLACE_USERNAME')
+                    password = os.getenv('ENV_PLACE_PASSWORD')
+                    # note: use https://www.reddit.com/prefs/apps
+                    app_client_id = os.getenv('ENV_PLACE_APP_CLIENT_ID')
+                    secret_key = os.getenv('ENV_PLACE_SECRET_KEY')
+
+                    data = {
+                        'grant_type': 'password',
+                        'username': username,
+                        'password': password
+                    }
+
+                    r = requests.post("https://ssl.reddit.com/api/v1/access_token",
+                                      data=data,
+                                      auth=HTTPBasicAuth(app_client_id, secret_key))
+
+                    print("received response: ", r.text)
+
+                    response_data = r.json()
+                    access_token = response_data["access_token"]
+                    # access_token_type = response_data["token_type"]  # this is just "bearer"
+                    access_token_expires_in_seconds = response_data["expires_in"]  # this is usually "3600"
+                    # access_token_scope = response_data["scope"]  # this is usually "*"
+
+                    # ts stores the time in seconds
+                    access_token_expires_at_timestamp = current_timestamp + int(access_token_expires_in_seconds)
+
+                    print("received new access token: ", access_token)
+                    print("__________________")
+
+                # draw pixel onto screen
+                if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
+                    # get target color
+                    target_rgb = pix[current_r, current_c]
+
+                    # get converted color
+                    new_rgb = closest_color(target_rgb, rgb_colors_array)
+                    new_rgb_hex = rgb_to_hex(new_rgb)
+                    pixel_color_index = color_map[new_rgb_hex]
+
+                    # draw the pixel onto r/place
+                    set_pixel(access_token, pixel_x_start + current_r, pixel_y_start + current_c, pixel_color_index)
+                    last_time_placed_pixel = math.floor(time.time())
+
+                    current_r += 1
+                    current_c += 1
+
+                    # go back to first column when reached end of a row while drawing
+                    if current_r >= image_width:
+                        current_r = 0
+
+                    # exit when all pixels drawn
+                    if current_c >= image_height:
+                        print("__________________")
+                        print("done drawing image to r/place")
+                        print("__________________")
+                        break
+        except:
+            print("__________________")
+            print("Error refreshing tokens or drawing pixel")
+            print("Trying again in 30 seconds...")
+            print("__________________")
+            time.sleep(30)
+
+        if not repeat_forever:
+            break
+
+
+# get color palette
+init_rgb_colors_array()
+
+# load the pixels for the input image
+load_image()
+
+# run the image drawing task
+task()
+>>>>>>> 6683491 (Split code into functions for multithreading)
+>>>>>>> c0dfb14 (Split code into functions for multithreading)
