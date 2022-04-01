@@ -4,6 +4,7 @@
 
 ## About
 
+<<<<<<< HEAD
 This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 
 ## Features
@@ -12,6 +13,9 @@ This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 - Determines the cooldown time remaining for each account
 - Detects existing matching pixels on the r/place map and skips them
 - Automatically converts colors to the r/place color palette
+=======
+Script to draw an image onto r/place (https://www.reddit.com/r/place/)
+>>>>>>> 4a56f06 (Update README.md)
 
 My Version of rdeepak2002's reddit bot, it's too different now to easily merge so i'm not going to bother, feel free to do it you're self though
 
