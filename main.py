@@ -105,12 +105,17 @@ rgb_colors_array = []
 
 # auth variables
 <<<<<<< HEAD
+<<<<<<< HEAD
 access_tokens = []
 access_token_expires_at_timestamp = []
 =======
 access_token = None
 access_token_expires_at_timestamp = math.floor(time.time())
 >>>>>>> c0dfb14 (Split code into functions for multithreading)
+=======
+access_tokens = []
+access_token_expires_at_timestamp = []
+>>>>>>> 77301e6 (Attempting to fix multi threading via access token array)
 
 # image.jpg information
 pix = None
@@ -131,6 +136,7 @@ first_run_counter = 0
 # place a pixel immediately
 first_run = True
 >>>>>>> e21509e (Added ability for script to place the first pixel immediately)
+
 
 # function to convert rgb tuple to hexadecimal string
 >>>>>>> 6683491 (Split code into functions for multithreading)
@@ -1001,7 +1007,7 @@ def task(credentials_index):
             update_str = ""
 
             # reference to globally shared variables such as auth token and image
-            global access_token
+            global access_tokens
             global access_token_expires_at_timestamp
 
             # boolean to place a pixel the moment the script is first run
@@ -1023,7 +1029,8 @@ def task(credentials_index):
                     print("__________________")
 
                 # refresh access token if necessary
-                if access_token is None or current_timestamp >= access_token_expires_at_timestamp:
+                if access_tokens[credentials_index] is None or current_timestamp >= access_token_expires_at_timestamp[
+                    credentials_index]:
                     print("__________________")
                     print("Thread #" + str(credentials_index))
                     print("refreshing access token...")
@@ -1040,28 +1047,30 @@ def task(credentials_index):
                         'username': username,
                         'password': password
                     }
-                    
+
                     r = requests.post("https://ssl.reddit.com/api/v1/access_token",
                                       data=data,
-                                      auth=HTTPBasicAuth(app_client_id, secret_key),headers={'User-agent': f'placebot{random.randint(1,100000)}'})
+                                      auth=HTTPBasicAuth(app_client_id, secret_key),
+                                      headers={'User-agent': f'placebot{random.randint(1, 100000)}'})
 
                     print("received response: ", r.text)
 
                     response_data = r.json()
-                    access_token = response_data["access_token"]
+                    access_tokens[credentials_index] = response_data["access_token"]
                     # access_token_type = response_data["token_type"]  # this is just "bearer"
                     access_token_expires_in_seconds = response_data["expires_in"]  # this is usually "3600"
                     # access_token_scope = response_data["scope"]  # this is usually "*"
 
                     # ts stores the time in seconds
-                    access_token_expires_at_timestamp = current_timestamp + int(access_token_expires_in_seconds)
+                    access_token_expires_at_timestamp[credentials_index] = current_timestamp \
+                                                                           + int(access_token_expires_in_seconds)
 
-                    print("received new access token: ", access_token)
+                    print("received new access token: ", access_tokens[credentials_index])
                     print("__________________")
 
                 # draw pixel onto screen
-                if access_token is not None and (current_timestamp >= last_time_placed_pixel + pixel_place_frequency
-                                                 or first_run):
+                if access_tokens[credentials_index] is not None and (current_timestamp >= last_time_placed_pixel
+                                                                     + pixel_place_frequency or first_run):
                     # place pixel immediately
                     first_run = False
 
@@ -1074,7 +1083,8 @@ def task(credentials_index):
                     pixel_color_index = color_map[new_rgb_hex]
 
                     # draw the pixel onto r/place
-                    set_pixel(access_token, pixel_x_start + current_r, pixel_y_start + current_c, pixel_color_index)
+                    set_pixel(access_tokens[credentials_index], pixel_x_start + current_r,
+                              pixel_y_start + current_c, pixel_color_index)
                     last_time_placed_pixel = math.floor(time.time())
 
                     current_r += 1
@@ -1130,6 +1140,8 @@ num_credentials = len(json.loads(os.getenv('ENV_PLACE_USERNAME')))
 
 for i in range(num_credentials):
     # run the image drawing task
+    access_tokens.append(None)
+    access_token_expires_at_timestamp.append(math.floor(time.time()))
     thread1 = threading.Thread(target=task, args=[i])
     thread1.start()
 >>>>>>> 12ab83e (Added support for multiple threads)
