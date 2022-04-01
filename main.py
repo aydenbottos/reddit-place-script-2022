@@ -1,9 +1,11 @@
 # imports
-import os
+import os, random
 import math
 import requests
 import json
 import time
+from io import BytesIO
+from websocket import create_connection
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 from PIL import ImageColor
@@ -42,7 +44,10 @@ def rgb_to_hex(rgb):
 
 
 def closest_color(target_rgb, rgb_colors_array_in):
-    r, g, b = target_rgb
+    r, g, b, a = target_rgb
+    print(r,g,b,a)
+    if a < 255:
+        return (69,42,0)
     color_diffs = []
     for color in rgb_colors_array_in:
         cr, cg, cb = color
@@ -59,7 +64,7 @@ for color_hex, color_index in color_map.items():
 
 print("available colors (rgb): ", rgb_colors_array)
 
-image_path = os.path.join(os.path.abspath(os.getcwd()), 'image.jpg')
+image_path = os.path.join(os.path.abspath(os.getcwd()), 'unknown.png')
 im = Image.open(image_path)
 
 pix = im.load()
@@ -80,16 +85,16 @@ while True:
     pix[r, c] = new_rgb
 
     current_r += 1
-    current_c += 1
 
     if current_r >= image_width:
+        current_c += 1
         current_r = 0
 
     if current_c >= image_height:
-        print("done drawing image locally to new_image.jpg")
+        print("done drawing image locally to new_image.png")
         break
 
-new_image_path = os.path.join(os.path.abspath(os.getcwd()), 'new_image.jpg')
+new_image_path = os.path.join(os.path.abspath(os.getcwd()), 'new_image.png')
 im.save(new_image_path)
 
 # developer's reddit username and password
@@ -144,12 +149,61 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
 
     print(response.text)
 
+def get_board(bearer):
+    print("Getting board")
+    ws = create_connection("wss://gql-realtime-2.reddit.com/query")
+    ws.send(json.dumps({"type":"connection_init","payload":{"Authorization":"Bearer "+bearer}}))
+    ws.recv()
+    ws.send(json.dumps({"id":"1","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CONFIG"}}},"extensions":{},"operationName":"configuration","query":"subscription configuration($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on ConfigurationMessageData {\n          colorPalette {\n            colors {\n              hex\n              index\n              __typename\n            }\n            __typename\n          }\n          canvasConfigurations {\n            index\n            dx\n            dy\n            __typename\n          }\n          canvasWidth\n          canvasHeight\n          __typename\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
+    ws.recv()
+    ws.send(json.dumps({"id":"2","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CANVAS","tag":"0"}}},"extensions":{},"operationName":"replace","query":"subscription replace($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on FullFrameMessageData {\n          __typename\n          name\n          timestamp\n        }\n        ... on DiffFrameMessageData {\n          __typename\n          name\n          currentTimestamp\n          previousTimestamp\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
+
+    file = ""
+    while True:
+        temp = json.loads(ws.recv())
+        if temp['type'] == 'data':
+            msg = temp['payload']['data']['subscribe']
+            if msg['data']['__typename'] == 'FullFrameMessageData':
+                file = msg['data']['name']
+                break;
+
+
+    ws.close()
+
+    img = BytesIO(requests.get(file, stream = True).content)
+    print("Got image:", file)
+
+    return img
+
+def get_unset_pixel(img):
+    x = 0
+    y= 0
+    pix2 = Image.open(img).convert('RGB').load()
+    while True:
+        x += 1
+
+        if x >= image_width:
+            y += 1
+            x = 0
+
+        if y >= image_height:
+            break;
+
+        print(x+pixel_x_start,y+pixel_y_start)
+        print(x, y,"img",image_width,image_height)
+        target_rgb = pix[x, y]
+        new_rgb = closest_color(target_rgb, rgb_colors_array)
+        if pix2[x,y] != new_rgb:
+            if new_rgb != (69,42,0):
+                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                break;
+            else:
+                print("TransparrentPixel")
+    return x,y
 
 # current pixel row and pixel column being drawn
 current_r = 0
 current_c = 0
-
-
 # loop to keep refreshing tokens when necessary and to draw pixels when the time is right
 while True:
     current_timestamp = math.floor(time.time())
@@ -157,6 +211,10 @@ while True:
     # refresh access token if necessary
     if access_token is None or current_timestamp >= expires_at_timestamp:
         print("refreshing access token...")
+
+        headers = {
+            'user-agent': 'Mozilla/5.0 (Macintosh; PPC Mac OS X 10_8_7 rv:5.0; en-US) AppleWebKit/533.31.5 (KHTML, like Gecko) Version/4.0 Safari/533.31.5',
+        }
 
         data = {
             'grant_type': 'password',
@@ -166,7 +224,8 @@ while True:
 
         r = requests.post("https://ssl.reddit.com/api/v1/access_token",
                           data=data,
-                          auth=HTTPBasicAuth(app_client_id, secret_key))
+                          auth=HTTPBasicAuth(app_client_id, secret_key),
+                          headers=headers)
 
         print("received response: ", r.text)
 
@@ -185,13 +244,15 @@ while True:
     # draw pixel onto screen
     if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
         # get current pixel position from input image
-        r = current_r
-        c = current_c
+        r, c = get_unset_pixel(get_board(access_token))
 
+        target_rgb = pix[r, c]
         # get converted color
         new_rgb = closest_color(target_rgb, rgb_colors_array)
         new_rgb_hex = rgb_to_hex(new_rgb)
         pixel_color_index = color_map[new_rgb_hex]
+
+        print(pixel_color_index)
 
         # draw the pixel onto r/place
         set_pixel(access_token, pixel_x_start + r, pixel_y_start + c, pixel_color_index)
@@ -207,4 +268,6 @@ while True:
         # exit when all pixels drawn
         if current_c >= image_height:
             print("done drawing image to r/place")
+            current_c = 0
             exit(0)
+    time.sleep(10000)
