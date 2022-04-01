@@ -449,8 +449,6 @@ while True:
         # get current pixel position from input image
         r, c = get_unset_pixel(get_board(access_token))
 
-        quit()
-
         target_rgb = pix[r, c]
         # get converted color
 >>>>>>> b567773 (stuff)
