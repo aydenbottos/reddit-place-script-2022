@@ -62,15 +62,19 @@ Put in the following content:
 
 ```text
 <<<<<<< HEAD
+<<<<<<< HEAD
 ENV_PLACE_USERNAME='["developer_username"]'
 ENV_PLACE_PASSWORD='["developer_password"]'
 ENV_PLACE_APP_CLIENT_ID='["app_client_id"]'
 ENV_PLACE_SECRET_KEY='["app_secret_key"]'
 =======
+=======
+>>>>>>> 3a4679a (Added support for multiple threads)
 ENV_PLACE_USERNAME=["username","username2"]
 ENV_PLACE_PASSWORD=["password","password2"]
 ENV_PLACE_APP_CLIENT_ID=["app_client_id","app_client_id2"]
 ENV_PLACE_SECRET_KEY=["app_secret_key","app_secret_key2"]
+<<<<<<< HEAD
 >>>>>>> 521a14b (Scuffed multi account support)
 ENV_DRAW_X_START="x_position_start_integer"
 ENV_DRAW_Y_START="y_position_start_integer"
@@ -99,6 +103,27 @@ Change image.jpg to specify what image to draw. One pixel is drawn every 5 minut
 =======
 Change unknown.png to specify what image to draw. Note: one pixel is drawn every 5 minutes per account
 >>>>>>> 2191e27 (mroe just in case stuff, as well as updated readme slightly)
+=======
+=======
+ENV_PLACE_USERNAME='["developer_username"]'
+ENV_PLACE_PASSWORD='["developer_password"]'
+ENV_PLACE_APP_CLIENT_ID='["app_client_id"]'
+ENV_PLACE_SECRET_KEY='["app_secret_key"]'
+>>>>>>> 12ab83e (Added support for multiple threads)
+ENV_DRAW_X_START="x_position_start_integer"
+ENV_DRAW_Y_START="y_position_start_integer"
+ENV_R_START='["0"]'
+ENV_C_START='["0"]'
+```
+
+<<<<<<< HEAD
+Change unknown.png to specify what image to draw. Note: one pixel is drawn every 5 minutes per account
+=======
+Note: Multiple fields can be passed into the arrays to spawn a thread for each one.
+
+Change image.jpg to specify what image to draw. One pixel is drawn every 5 minutes and only jpeg images are supported.
+>>>>>>> 12ab83e (Added support for multiple threads)
+>>>>>>> 3a4679a (Added support for multiple threads)
 
 ## Run the Script
 
