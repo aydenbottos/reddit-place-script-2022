@@ -743,5 +743,9 @@ for i in range(num_credentials):
             print("done drawing image to r/place")
             current_c = 0
             exit(0)
+<<<<<<< HEAD
     time.sleep(10000)
 >>>>>>> b567773 (stuff)
+=======
+    time.sleep(10)
+>>>>>>> f1820df (fuck)
