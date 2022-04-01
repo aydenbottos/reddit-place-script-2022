@@ -193,8 +193,8 @@ def get_unset_pixel(img):
         print(x, y,"img",image_width,image_height)
         target_rgb = pix[x, y]
         new_rgb = closest_color(target_rgb, rgb_colors_array)
-        if pix2[x,y] != new_rgb:
-            print(new_rgb,new_rgb != (69,42,0))
+        if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
+            print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
             if new_rgb != (69,42,0):
                 print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
                 break;
@@ -246,6 +246,8 @@ while True:
     if True: #access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
         # get current pixel position from input image
         r, c = get_unset_pixel(get_board(access_token))
+
+        quit()
 
         target_rgb = pix[r, c]
         # get converted color
