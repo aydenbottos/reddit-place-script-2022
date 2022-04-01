@@ -270,4 +270,4 @@ while True:
             print("done drawing image to r/place")
             current_c = 0
             exit(0)
-    time.sleep(10000)
+    time.sleep(10)
