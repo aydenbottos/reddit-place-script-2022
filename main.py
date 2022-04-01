@@ -10,11 +10,17 @@ import requests
 import json
 import time
 <<<<<<< HEAD
+<<<<<<< HEAD
 import threading
 =======
 >>>>>>> b567773 (stuff)
+=======
+>>>>>>> df71c41 (Added simple threading example)
 from io import BytesIO
 from websocket import create_connection
+=======
+import threading
+>>>>>>> 1b25969 (Added simple threading example)
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 from PIL import ImageColor
@@ -350,6 +356,7 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
         print("placing succeeded")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     # THIS COMMENTED CODE LETS YOU DEBUG THREADS FOR TESTING
     # Works perfect with one thread.
     # With multiple threads, every time you press Enter you move to the next one.
@@ -362,6 +369,8 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
     # Reddit returns time in ms and we need seconds, so divide by 1000
     return waitTime / 1000
 =======
+=======
+>>>>>>> df71c41 (Added simple threading example)
     print(response.text)
     if 'errors' in json.loads(response.text):
         error_count += 1
@@ -369,7 +378,13 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
             print("Some thing bad has happened, you've passed the error limit")
             quit()
         print("that's probably not good",error_count,"error(s)")
+<<<<<<< HEAD
 >>>>>>> 131f6a3 (a just in case error thing)
+=======
+=======
+    print("received response: ", response.text)
+>>>>>>> 1b25969 (Added simple threading example)
+>>>>>>> df71c41 (Added simple threading example)
 
 def get_board(bearer):
     print("Getting board")
@@ -1062,9 +1077,9 @@ def task():
         except:
             print("__________________")
             print("Error refreshing tokens or drawing pixel")
-            print("Trying again in 30 seconds...")
+            print("Trying again in 3 minutes...")
             print("__________________")
-            time.sleep(30)
+            time.sleep(180)
 
         if not repeat_forever:
             break
@@ -1077,6 +1092,14 @@ init_rgb_colors_array()
 load_image()
 
 # run the image drawing task
+<<<<<<< HEAD
 task()
 >>>>>>> 6683491 (Split code into functions for multithreading)
+<<<<<<< HEAD
 >>>>>>> c0dfb14 (Split code into functions for multithreading)
+=======
+=======
+thread1 = threading.Thread(target=task, args=())
+thread1.start()
+>>>>>>> 1b25969 (Added simple threading example)
+>>>>>>> df71c41 (Added simple threading example)
