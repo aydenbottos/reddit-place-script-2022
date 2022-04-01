@@ -1032,10 +1032,10 @@ def task(credentials_index):
                         'username': username,
                         'password': password
                     }
-
+                    
                     r = requests.post("https://ssl.reddit.com/api/v1/access_token",
                                       data=data,
-                                      auth=HTTPBasicAuth(app_client_id, secret_key))
+                                      auth=HTTPBasicAuth(app_client_id, secret_key),headers={'User-agent': f'placebot{random.randint(1,100000)}'})
 
                     print("received response: ", r.text)
 
