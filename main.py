@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 import os
 import os.path
+=======
+# imports
+import os, random
+>>>>>>> b567773 (stuff)
 import math
 import requests
 import json
 import time
+<<<<<<< HEAD
 import threading
+=======
+>>>>>>> b567773 (stuff)
 from io import BytesIO
 from websocket import create_connection
 from requests.auth import HTTPBasicAuth
@@ -108,7 +116,10 @@ def color_id_to_name(color_id):
 
 # function to find the closest rgb color from palette to a target rgb color
 def closest_color(target_rgb, rgb_colors_array_in):
-    r, g, b = target_rgb
+    r, g, b, a = target_rgb
+    print(r,g,b,a)
+    if a < 255:
+        return (69,42,0)
     color_diffs = []
     for color in rgb_colors_array_in:
         cr, cg, cb = color
@@ -117,6 +128,67 @@ def closest_color(target_rgb, rgb_colors_array_in):
     return min(color_diffs)[1]
 
 
+<<<<<<< HEAD
+=======
+rgb_colors_array = []
+
+for color_hex, color_index in color_map.items():
+    rgb_array = ImageColor.getcolor(color_hex, "RGB")
+    rgb_colors_array.append(rgb_array)
+
+print("available colors (rgb): ", rgb_colors_array)
+
+image_path = os.path.join(os.path.abspath(os.getcwd()), 'unknown.png')
+im = Image.open(image_path)
+
+pix = im.load()
+print("image size: ", im.size)  # Get the width and hight of the image for iterating over
+image_width, image_height = im.size
+
+# test drawing image to file called new_image before drawing to r/place
+current_r = 0
+current_c = 0
+
+while True:
+    r = current_r
+    c = current_c
+
+    target_rgb = pix[r, c]
+    new_rgb = closest_color(target_rgb, rgb_colors_array)
+    # print("closest color: ", new_rgb)
+    pix[r, c] = new_rgb
+
+    current_r += 1
+
+    if current_r >= image_width:
+        current_c += 1
+        current_r = 0
+
+    if current_c >= image_height:
+        print("done drawing image locally to new_image.png")
+        break
+
+new_image_path = os.path.join(os.path.abspath(os.getcwd()), 'new_image.png')
+im.save(new_image_path)
+
+# developer's reddit username and password
+username = os.getenv('ENV_PLACE_USERNAME')
+password = os.getenv('ENV_PLACE_PASSWORD')
+# note: use https://www.reddit.com/prefs/apps
+app_client_id = os.getenv('ENV_PLACE_APP_CLIENT_ID')
+secret_key = os.getenv('ENV_PLACE_SECRET_KEY')
+
+# global variables for script
+access_token = None
+current_timestamp = math.floor(time.time())
+last_time_placed_pixel = math.floor(time.time())
+access_token_expires_at_timestamp = math.floor(time.time())
+
+# note: reddit limits us to place 1 pixel every 5 minutes, so I am setting it to 5 minutes and 30 seconds per pixel
+pixel_place_frequency = 330
+
+
+>>>>>>> b567773 (stuff)
 # method to draw a pixel at an x, y coordinate in r/place with a specific color
 def set_pixel_and_check_ratelimit(
     access_token_in, x, y, color_index_in=18, canvas_index=0
@@ -180,7 +252,59 @@ def set_pixel_and_check_ratelimit(
     # Reddit returns time in ms and we need seconds, so divide by 1000
     return waitTime / 1000
 
+def get_board(bearer):
+    print("Getting board")
+    ws = create_connection("wss://gql-realtime-2.reddit.com/query")
+    ws.send(json.dumps({"type":"connection_init","payload":{"Authorization":"Bearer "+bearer}}))
+    ws.recv()
+    ws.send(json.dumps({"id":"1","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CONFIG"}}},"extensions":{},"operationName":"configuration","query":"subscription configuration($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on ConfigurationMessageData {\n          colorPalette {\n            colors {\n              hex\n              index\n              __typename\n            }\n            __typename\n          }\n          canvasConfigurations {\n            index\n            dx\n            dy\n            __typename\n          }\n          canvasWidth\n          canvasHeight\n          __typename\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
+    ws.recv()
+    ws.send(json.dumps({"id":"2","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CANVAS","tag":"0"}}},"extensions":{},"operationName":"replace","query":"subscription replace($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on FullFrameMessageData {\n          __typename\n          name\n          timestamp\n        }\n        ... on DiffFrameMessageData {\n          __typename\n          name\n          currentTimestamp\n          previousTimestamp\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
 
+    file = ""
+    while True:
+        temp = json.loads(ws.recv())
+        if temp['type'] == 'data':
+            msg = temp['payload']['data']['subscribe']
+            if msg['data']['__typename'] == 'FullFrameMessageData':
+                file = msg['data']['name']
+                break;
+
+
+    ws.close()
+
+    img = BytesIO(requests.get(file, stream = True).content)
+    print("Got image:", file)
+
+    return img
+
+def get_unset_pixel(img):
+    x = 0
+    y= 0
+    pix2 = Image.open(img).convert('RGB').load()
+    while True:
+        x += 1
+
+        if x >= image_width:
+            y += 1
+            x = 0
+
+        if y >= image_height:
+            break;
+
+        print(x+pixel_x_start,y+pixel_y_start)
+        print(x, y,"img",image_width,image_height)
+        target_rgb = pix[x, y]
+        new_rgb = closest_color(target_rgb, rgb_colors_array)
+        if pix2[x,y] != new_rgb:
+            if new_rgb != (69,42,0):
+                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                break;
+            else:
+                print("TransparrentPixel")
+    return x,y
+
+<<<<<<< HEAD
 def get_board(access_token_in):
     print("Getting board")
     ws = create_connection(
@@ -264,11 +388,20 @@ def get_unset_pixel(boardimg, x, y):
     num_loops = 0
     while True:
         x += 1
+=======
+# current pixel row and pixel column being drawn
+current_r = 0
+current_c = 0
+# loop to keep refreshing tokens when necessary and to draw pixels when the time is right
+while True:
+    current_timestamp = math.floor(time.time())
+>>>>>>> b567773 (stuff)
 
         if x >= image_width:
             y += 1
             x = 0
 
+<<<<<<< HEAD
         if y >= image_height:
             if num_loops > 1:
                 target_rgb = pix[0, 0]
@@ -280,6 +413,44 @@ def get_unset_pixel(boardimg, x, y):
             print(x + pixel_x_start, y + pixel_y_start)
             print(x, y, "boardimg", image_width, image_height)
         target_rgb = pix[x, y]
+=======
+        headers = {
+            'user-agent': 'Mozilla/5.0 (Macintosh; PPC Mac OS X 10_8_7 rv:5.0; en-US) AppleWebKit/533.31.5 (KHTML, like Gecko) Version/4.0 Safari/533.31.5',
+        }
+
+        data = {
+            'grant_type': 'password',
+            'username': username,
+            'password': password
+        }
+
+        r = requests.post("https://ssl.reddit.com/api/v1/access_token",
+                          data=data,
+                          auth=HTTPBasicAuth(app_client_id, secret_key),
+                          headers=headers)
+
+        print("received response: ", r.text)
+
+        response_data = r.json()
+
+        access_token = response_data["access_token"]
+        access_token_type = response_data["token_type"]  # this is just "bearer"
+        access_token_expires_in_seconds = response_data["expires_in"]  # this is usually "3600"
+        access_token_scope = response_data["scope"]  # this is usually "*"
+
+        # ts stores the time in seconds
+        expires_at_timestamp = current_timestamp + int(access_token_expires_in_seconds)
+
+        print("received new access token: ", access_token)
+
+    # draw pixel onto screen
+    if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
+        # get current pixel position from input image
+        r, c = get_unset_pixel(get_board(access_token))
+
+        target_rgb = pix[r, c]
+        # get converted color
+>>>>>>> b567773 (stuff)
         new_rgb = closest_color(target_rgb, rgb_colors_array)
         if pix2[x + pixel_x_start, y + pixel_y_start] != new_rgb:
             if verbose_mode:
@@ -305,6 +476,7 @@ def get_unset_pixel(boardimg, x, y):
                 print("TransparrentPixel")
     return x, y, new_rgb
 
+<<<<<<< HEAD
 
 # method to define the color palette array
 def init_rgb_colors_array():
@@ -341,6 +513,12 @@ def task(credentials_index):
     while True:
         # try:
         # global variables for script
+=======
+        print(pixel_color_index)
+
+        # draw the pixel onto r/place
+        set_pixel(access_token, pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+>>>>>>> b567773 (stuff)
         last_time_placed_pixel = math.floor(time.time())
 
         # note: reddit limits us to place 1 pixel every 5 minutes, so I am setting it to
@@ -352,6 +530,7 @@ def task(credentials_index):
         pixel_x_start = int(os.getenv("ENV_DRAW_X_START"))
         pixel_y_start = int(os.getenv("ENV_DRAW_Y_START"))
 
+<<<<<<< HEAD
         try:
             # current pixel row and pixel column being drawn
             current_r = int(json.loads(os.getenv("ENV_R_START"))[credentials_index])
@@ -558,3 +737,11 @@ for i in range(num_credentials):
     thread1 = threading.Thread(target=task, args=[i])
     thread1.start()
     time.sleep(delay_between_launches_seconds)
+=======
+        # exit when all pixels drawn
+        if current_c >= image_height:
+            print("done drawing image to r/place")
+            current_c = 0
+            exit(0)
+    time.sleep(10000)
+>>>>>>> b567773 (stuff)
