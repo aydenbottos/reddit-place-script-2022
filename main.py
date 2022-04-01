@@ -297,7 +297,7 @@ def get_unset_pixel(img):
         target_rgb = pix[x, y]
         new_rgb = closest_color(target_rgb, rgb_colors_array)
         if pix2[x,y] != new_rgb:
-            if new_rgb != (69,42,0):
+            if new_rgb != (69,42,0,255):
                 print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
                 break;
             else:
