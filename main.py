@@ -243,7 +243,7 @@ while True:
         print("received new access token: ", access_token)
 
     # draw pixel onto screen
-    if True: #access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
+    if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
         # get current pixel position from input image
         r, c = get_unset_pixel(get_board(access_token))
 
