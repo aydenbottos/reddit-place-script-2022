@@ -66,6 +66,7 @@ color_map = {
     "#FFFFFF": 31,  # white
 }
 
+<<<<<<< HEAD
 # map of pixel color ids to verbose name (for debugging)
 name_map = {
     2: "Bright Red",
@@ -103,6 +104,8 @@ image_height = None
 first_run_counter = 0
 
 # function to convert rgb tuple to hexadecimal string
+=======
+>>>>>>> 131f6a3 (a just in case error thing)
 def rgb_to_hex(rgb):
     return ("#%02x%02x%02x" % rgb).upper()
 
@@ -182,7 +185,7 @@ accounts = {
 
 # this is horrible, but i'm too lazy to make it not bad
 def fill_accounts():
-    print(len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
+    print("aaaa",len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
         len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))),
         len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))),
         len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))
@@ -252,6 +255,8 @@ def get_valid_auth(name):
 
 fill_accounts()
 
+error_count = 0
+error_limit = 10
 
 >>>>>>> b567773 (stuff)
 # method to draw a pixel at an x, y coordinate in r/place with a specific color
@@ -305,6 +310,7 @@ def set_pixel_and_check_ratelimit(
         )
         print("placing succeeded")
 
+<<<<<<< HEAD
     # THIS COMMENTED CODE LETS YOU DEBUG THREADS FOR TESTING
     # Works perfect with one thread.
     # With multiple threads, every time you press Enter you move to the next one.
@@ -316,6 +322,15 @@ def set_pixel_and_check_ratelimit(
 
     # Reddit returns time in ms and we need seconds, so divide by 1000
     return waitTime / 1000
+=======
+    print(response.text)
+    if 'errors' in json.loads(response.text):
+        error_count += 1
+        if error_count > error_limit:
+            print("Some thing bad has happened, you've passed the error limit")
+            quit()
+        print("that's probably not good",error_count,"error(s)")
+>>>>>>> 131f6a3 (a just in case error thing)
 
 def get_board(bearer):
     print("Getting board")
@@ -511,7 +526,11 @@ while True:
             print("\nAccount Placing: ",name,"\n")
 
             # draw the pixel onto r/place
-            set_pixel(info['access_token'], pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+            try:
+                set_pixel(info['access_token'], pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+            except Exception as e:
+                print(e)
+
             if not placing:
                 last_time_placed_pixel = math.floor(time.time())
 
