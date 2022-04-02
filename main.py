@@ -374,7 +374,10 @@ def set_pixel_and_check_ratelimit(
     access_token_in, x, y, color_index_in=18, canvas_index=0
 ):
     print(
-        "placing pixel with color index " + str(color_index_in) + " at " + str((x, y))
+        "placing pixel with color index "
+        + str(color_index_in)
+        + " at "
+        + str((x, y))
     )
 >>>>>>> aa7e04c (Fetch cooldown, formatting changes (#22))
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
@@ -530,7 +533,10 @@ def get_board(access_token_in):
                 "payload": {
                     "variables": {
                         "input": {
-                            "channel": {"teamOwner": "AFD2022", "category": "CONFIG"}
+                            "channel": {
+                                "teamOwner": "AFD2022",
+                                "category": "CONFIG",
+                            }
                         }
                     },
                     "extensions": {},
@@ -1274,7 +1280,9 @@ def task(credentials_index):
 
             # log next time until drawing
             time_until_next_draw = (
-                last_time_placed_pixel + pixel_place_frequency - current_timestamp
+                last_time_placed_pixel
+                + pixel_place_frequency
+                - current_timestamp
             )
             new_update_str = (
                 str(time_until_next_draw) + " seconds until next pixel is drawn"
@@ -1326,7 +1334,9 @@ def task(credentials_index):
                     "https://ssl.reddit.com/api/v1/access_token",
                     data=data,
                     auth=HTTPBasicAuth(app_client_id, secret_key),
-                    headers={"User-agent": f"placebot{random.randint(1, 100000)}"},
+                    headers={
+                        "User-agent": f"placebot{random.randint(1, 100000)}"
+                    },
                 )
 
                 if verbose:
@@ -1345,7 +1355,10 @@ def task(credentials_index):
                     credentials_index
                 ] = current_timestamp + int(access_token_expires_in_seconds)
 
-                print("received new access token: ", access_tokens[credentials_index])
+                print(
+                    "received new access token: ",
+                    access_tokens[credentials_index],
+                )
 
             # draw pixel onto screen
 <<<<<<< HEAD
@@ -1365,7 +1378,8 @@ def task(credentials_index):
 >>>>>>> 0c9f07a (Add counter to fix first run issue with multithreading)
 =======
             if access_tokens[credentials_index] is not None and (
-                current_timestamp >= last_time_placed_pixel + pixel_place_frequency
+                current_timestamp
+                >= last_time_placed_pixel + pixel_place_frequency
                 or first_run_counter <= credentials_index
             ):
 
@@ -1379,7 +1393,9 @@ def task(credentials_index):
 
                 # get current pixel position from input image and replacement color
                 current_r, current_c, new_rgb = get_unset_pixel(
-                    get_board(access_tokens[credentials_index]), current_r, current_c
+                    get_board(access_tokens[credentials_index]),
+                    current_r,
+                    current_c,
                 )
 
                 # get converted color
