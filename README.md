@@ -5,6 +5,7 @@
 ## About
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 
 ## Features
@@ -16,6 +17,9 @@ This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 =======
 Script to draw an image onto r/place (https://www.reddit.com/r/place/)
 >>>>>>> 4a56f06 (Update README.md)
+=======
+Script to draw an image onto r/place (<https://www.reddit.com/r/place/>)
+>>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
 
 My Version of rdeepak2002's reddit bot, it's too different now to easily merge so i'm not going to bother, feel free to do it you're self though
 
@@ -27,8 +31,12 @@ My Version of rdeepak2002's reddit bot, it's too different now to easily merge s
 
 ## Requirements
 
+<<<<<<< HEAD
 - [Python 3](https://www.python.org/downloads/)
 - [A Reddit App Client ID and App Secret Key](https://www.reddit.com/prefs/apps)
+=======
+Python 3 (<https://www.python.org/downloads/>)
+>>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
 
 ## How to Get App Client ID and App Secret Key
 
@@ -37,10 +45,17 @@ You need to generate an app client id and app secret key for each account in ord
 Steps:
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 1. Visit <https://www.reddit.com/prefs/apps>
 =======
 1. Visit https://www.reddit.com/prefs/apps
 >>>>>>> 521a14b (Scuffed multi account support)
+=======
+1. Visit https://www.reddit.com/prefs/apps
+=======
+1. Visit <https://www.reddit.com/prefs/apps>
+>>>>>>> aa7e04c (Fetch cooldown, formatting changes (#22))
+>>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
 2. Click "create (another) app" button at very bottom
 3. Select the "script" option and fill in the fields with anything
 
@@ -118,6 +133,7 @@ ENV_C_START='["0"]'
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Change unknown.png to specify what image to draw. Note: one pixel is drawn every 5 minutes per account
 =======
 =======
@@ -125,11 +141,16 @@ Change unknown.png to specify what image to draw. Note: one pixel is drawn every
 - ENV_PLACE_PASSWORD is the password of the developer account
 - ENV_PLACE_APP_CLIENT_ID is the client id for the app / script registered with Reddit
 - ENV_PLACE_SECRET_KEY is the secret key for the app / script registered with Reddit
+=======
+- ENV_PLACE_USERNAME is an array of usernames of developer accounts
+- ENV_PLACE_PASSWORD is an array of the passwords of developer accounts
+- ENV_PLACE_APP_CLIENT_ID is an array of the client ids for the app / script registered with Reddit
+- ENV_PLACE_SECRET_KEY is an array of the secret keys for the app / script registered with Reddit
+>>>>>>> aa7e04c (Fetch cooldown, formatting changes (#22))
 - ENV_DRAW_X_START specifies the x position to draw the image on the r/place canvas
 - ENV_DRAW_Y_START specifies the y position to draw the image on the r/place canvas
-- ENV_R_START specifies which x position of the original image to start at while drawing it
-- ENV_C_START specifies which y position of the original image to start at while drawing it
-
+- ENV_R_START is an array which specifies which x position of the original image to start at while drawing it
+- ENV_C_START is an array which specifies which y position of the original image to start at while drawing it
 
 >>>>>>> 4c956a0 (Added support for multiple threads)
 Note: Multiple fields can be passed into the arrays to spawn a thread for each one.
@@ -181,6 +202,7 @@ ENV_C_START='["0", "50"]'
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 In this case, the first worker will start drawing from (0, 0) and the second worker will start drawing from (0, 50) from the input image.jpg file.
 
 This is useful if you want different threads drawing different parts of the image with different accounts.
@@ -194,3 +216,8 @@ This is useful if you want different threads drawing different parts of the imag
 >>>>>>> 5cc71e0 (Update readme with instructions for multiple workers)
 =======
 >>>>>>> 2db7da6 (Update README.md)
+=======
+In this case, the first worker will start drawing from (0, 0) and the second worker will start drawing from (0, 50) from the input image.jpg file.
+
+This is useful if you want different threads drawing different parts of the image with different accounts.
+>>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
