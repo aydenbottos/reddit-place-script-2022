@@ -162,7 +162,7 @@ name_map = {
     27: "Black",
     29: "Grey",
     30: "Light Grey",
-    32: "White"
+    32: "White",
 }
 
 >>>>>>> ed52c90 (Add User Readable Color Names to Log Messages (#29))
@@ -232,7 +232,7 @@ def color_id_to_name(color_id):
 # Get a more verbose color indicator from a pixel color ID
 def color_id_to_name(color_id):
     if color_id in name_map.keys():
-        return "{} ({})".format(name_map[color_id],str(color_id))
+        return "{} ({})".format(name_map[color_id], str(color_id))
     return "Invalid Color ({})".format(str(color_id))
 
 
@@ -409,6 +409,7 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
 def set_pixel_and_check_ratelimit(
     access_token_in, x, y, color_index_in=18, canvas_index=0
 ):
+<<<<<<< HEAD
     print(
         "placing "
         + color_id_to_name(color_index_in)
@@ -416,7 +417,13 @@ def set_pixel_and_check_ratelimit(
         + str((x, y))
     )
 >>>>>>> aa7e04c (Fetch cooldown, formatting changes (#22))
+<<<<<<< HEAD
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
+=======
+=======
+    print("placing " + color_id_to_name(color_index_in) + " pixel at " + str((x, y)))
+>>>>>>> 1f2969e (Automatically format with Black)
+>>>>>>> bae7e48 (Automatically format with Black)
 
     url = "https://gql-realtime-2.reddit.com/query"
 
