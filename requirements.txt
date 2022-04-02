@@ -5,8 +5,13 @@ python-dotenv==0.20.0
 requests==2.27.1
 urllib3==1.26.9
 <<<<<<< HEAD
+<<<<<<< HEAD
 Pillow~=9.1.0
 websocket-client~=1.3.2
 =======
 Pillow~=9.1.0
 >>>>>>> c0dfb14 (Split code into functions for multithreading)
+=======
+Pillow~=9.1.0
+websocket-client~=1.3.2
+>>>>>>> 3db79f6 (Update requirements.txt)
