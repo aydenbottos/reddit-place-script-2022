@@ -61,6 +61,7 @@ jobs:
         with:
           commit_message: Automatically format with Black
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
       # Runs the code through Black
@@ -71,3 +72,7 @@ jobs:
 >>>>>>> db29347 (automatically fix)
 =======
 >>>>>>> bccc2bc (automatically push changes)
+=======
+          create_branch: true
+
+>>>>>>> cf2b6c9 (Update black.yml)
