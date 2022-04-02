@@ -16,9 +16,12 @@ on:
 >>>>>>> 8305cf5 (GitHub Actions automatic linting)
 =======
     branches: [main]
+<<<<<<< HEAD
   pull_request:
     branches: [main]
 >>>>>>> bccc2bc (automatically push changes)
+=======
+>>>>>>> 33ca075 (Don't run on PRs)
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -62,6 +65,7 @@ jobs:
           commit_message: Automatically format with Black
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
       # Runs the code through Black
@@ -76,3 +80,5 @@ jobs:
           create_branch: true
 
 >>>>>>> cf2b6c9 (Update black.yml)
+=======
+>>>>>>> 33ca075 (Don't run on PRs)
