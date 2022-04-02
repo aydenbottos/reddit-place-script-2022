@@ -15,10 +15,11 @@ This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 
 My Version of rdeepak2002's reddit bot, it's too different now to easily merge so i'm not going to bother, feel free to do it you're self though
 
-Changes(From the originally forked version)
-Multiple Account support (rdeepak2002 has it as well now)
-Getting the current board image and only drawing what's necessary (rdeepak2002 waiting to be merged)
-Transparency 
+## Changes(From the originally forked version)
+
+- Multiple Account support (rdeepak2002 has it as well now)
+- Getting the current board image and only drawing what's necessary (rdeepak2002 has it as well now)
+- Transparency
 
 ## Requirements
 
@@ -73,6 +74,7 @@ ENV_R_START='["0"]'
 ENV_C_START='["0"]'
 ```
 
+<<<<<<< HEAD
 - ENV_PLACE_USERNAME is an array of usernames of developer accounts
 - ENV_PLACE_PASSWORD is an array of the passwords of developer accounts
 - ENV_PLACE_APP_CLIENT_ID is an array of the client ids for the app / script registered with Reddit
@@ -85,6 +87,9 @@ ENV_C_START='["0"]'
 Note: Multiple fields can be passed into the arrays to spawn a thread for each one.
 
 Change image.jpg to specify what image to draw. One pixel is drawn every 5 minutes and only jpeg images are supported.
+=======
+Change unknown.png to specify what image to draw. Note: one pixel is drawn every 5 minutes per account
+>>>>>>> 2191e27 (mroe just in case stuff, as well as updated readme slightly)
 
 ## Run the Script
 
