@@ -108,6 +108,15 @@ accounts = {
 
 # this is horrible, but i'm too lazy to make it not bad
 def fill_accounts():
+    print(len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
+        len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))),
+        len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))),
+        len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))
+
+    if len(json.loads(os.getenv('ENV_PLACE_USERNAME'))) != (len(json.loads(os.getenv('ENV_PLACE_USERNAME'))) + len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))) + len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))) + len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))/4:
+        print("Your .env file is messed up")
+        quit()
+
     i = 0
     for name in json.loads(os.getenv('ENV_PLACE_USERNAME')):
         account = {
@@ -305,5 +314,5 @@ while True:
                 print("done drawing image to r/place")
                 current_c = 0
 
-        time.sleep(pixel_place_frequency/len(accounts))
+        time.sleep((pixel_place_frequency/len(accounts))+2)
     time.sleep(10)
