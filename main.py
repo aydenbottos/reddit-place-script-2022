@@ -309,7 +309,7 @@ def get_board(bearer):
         file = ""
         while True:
             temp = json.loads(ws.recv())
-            print("\n",temp)
+            #print("\n",temp)
             if temp['type'] == 'data':
                 msg = temp['payload']['data']['subscribe']
                 if msg['data']['__typename'] == 'FullFrameMessageData':
@@ -321,7 +321,7 @@ def get_board(bearer):
 
     ws.close()
 
-    print("\n\n", already_added)
+    #print("\n\n", already_added)
 
 
     new_im = Image.new('RGB', (1000*2, 1000))
