@@ -20,17 +20,25 @@ pixel_y_start = int(os.getenv('ENV_DRAW_Y_START'))
 
 # map of colors for pixels you can place
 color_map = {
+    "#BE0039": 1,  # put color here
     "#FF4500": 2,  # bright red
     "#FFA800": 3,  # orange
     "#FFD635": 4,  # yellow
     "#00A368": 6,  # darker green
+    "#00CC78": 7,  # put color here
     "#7EED56": 8,  # lighter green
+    "#00756F": 9,  # put color here
+    "#009EAA": 10,  # put color here
     "#2450A4": 12,  # darkest blue
     "#3690EA": 13,  # medium normal blue
     "#51E9F4": 14,  # cyan
+    "#493AC1": 15,  # put color here
+    "#6A5CFF": 16,  # put color here
     "#811E9F": 18,  # darkest purple
     "#B44AC0": 19,  # normal purple
+    "#FF3881": 22,  # put color here
     "#FF99AA": 23,  # pink
+    "#6D482F": 24,  # put color here
     "#9C6926": 25,  # brown
     "#000000": 27,  # black
     "#898D90": 29,  # grey
