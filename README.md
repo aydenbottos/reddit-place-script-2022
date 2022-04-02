@@ -149,7 +149,11 @@ python3 main.py
 If you want two threads drawing the image at once you could have a setup like this:
 
 ```text
+<<<<<<< HEAD
 ENV_PLACE_USERNAME='["developer_username_1", "developer_username_2"]'
+=======
+ENV_PLACE_USERNAME='["developer_username", "developer_username_2"]'
+>>>>>>> 5cc71e0 (Update readme with instructions for multiple workers)
 ENV_PLACE_PASSWORD='["developer_password_1", "developer_password_2"]'
 ENV_PLACE_APP_CLIENT_ID='["app_client_id_1", "app_client_id_2"]'
 ENV_PLACE_SECRET_KEY='["app_secret_key_1", "app_secret_key_2"]'
@@ -159,7 +163,11 @@ ENV_R_START='["0", "0"]'
 ENV_C_START='["0", "50"]'
 ```
 
+<<<<<<< HEAD
 The same pattern can be used for multiple drawing at once. Note that the "ENV_PLACE_USERNAME", "ENV_PLACE_PASSWORD", "ENV_PLACE_APP_CLIENT_ID", "ENV_PLACE_SECRET_KEY", "ENV_R_START", and "ENV_C_START" variables MUST be string arrays of the same size.
+=======
+The same pattern can be used for 3 or more threads drawing at once. Note that the "ENV_PLACE_USERNAME", "ENV_PLACE_PASSWORD", "ENV_PLACE_APP_CLIENT_ID", "ENV_PLACE_SECRET_KEY", "ENV_R_START", and "ENV_C_START" variables should all be string arrays of the same size.
+>>>>>>> 5cc71e0 (Update readme with instructions for multiple workers)
 
 Also note that I did the following in the above example:
 
@@ -168,8 +176,14 @@ ENV_R_START='["0", "0"]'
 ENV_C_START='["0", "50"]'
 ```
 
+<<<<<<< HEAD
 In this case, the first worker will start drawing from (0, 0) and the second worker will start drawing from (0, 50) from the input image.jpg file.
 
 This is useful if you want different threads drawing different parts of the image with different accounts.
 
 If you'd like, you can enable Verbose Mode by editing the Python file. This will output a lot more information, and not neccessarily in the right order, but it is useful for development and debugging.
+=======
+In this case, the first worker will start drawing from (0, 0) and the second worker will start drawing from (0, 50) from the input image.jpg file. 
+
+This is useful if you want different threads drawing different parts of the image with different accounts. 
+>>>>>>> 5cc71e0 (Update readme with instructions for multiple workers)
