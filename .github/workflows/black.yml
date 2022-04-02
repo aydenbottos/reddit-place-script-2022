@@ -46,9 +46,12 @@ jobs:
           only-check: "no"
           line-length: "88"
           sanity-check: "safe"
+<<<<<<< HEAD
 =======
           only-check: "no"
 >>>>>>> bccc2bc (automatically push changes)
+=======
+>>>>>>> d79cb94 (Fix default formatting)
 
       # Pushes changes made by Black
       - uses: stefanzweifel/git-auto-commit-action@v4
