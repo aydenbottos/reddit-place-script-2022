@@ -1,4 +1,5 @@
 # imports
+from torpy.http.requests import TorRequests, tor_requests_session, do_request as requests_request
 import os, random
 import math
 import requests
@@ -13,6 +14,8 @@ from PIL import Image
 
 # load env variables
 load_dotenv()
+
+hostname = 'ifconfig.me'
 
 # pixel drawing preferences
 pixel_x_start = int(os.getenv('ENV_DRAW_X_START'))
@@ -149,7 +152,7 @@ def fill_accounts():
         i += 1
 
 # note: reddit limits us to place 1 pixel every 5 minutes, so I am setting it to 5 minutes and 30 seconds per pixel
-pixel_place_frequency = 320
+pixel_place_frequency = 400
 
 # global variables for script
 access_token = None
@@ -279,16 +282,17 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
         'Content-Type': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    #print(requests_request("https://ipinfo.io/ip", headers=headers))
+    response = requests_request(url,"POST", headers=headers, data=payload, hops=1, retries=0)
 
-    #print(response.text)
-    if 'errors' in json.loads(response.text):
-        print(response.text)
+    print(response)
+    if 'errors' in json.loads(response):
+        print(response)
         error_count += 1
         if error_count > error_limit:
             print("Some thing bad has happened, you've passed the error limit")
         print("that's probably not good",error_count,"error(s)")
-        print("next pixel in",((float(current_timestamp)-float(json.loads(response.text)['errors'][0]['extensions']['nextAvailablePixelTs'])/1000)),"seconds")
+        print("next pixel in",((float(current_timestamp)-float(json.loads(response)['errors'][0]['extensions']['nextAvailablePixelTs'])/1000)),"seconds")
 
 def get_board(bearer):
     print("Getting board")
