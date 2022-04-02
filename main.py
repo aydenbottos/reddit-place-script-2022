@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os
 import os.path
 =======
+=======
+>>>>>>> 26695d5 (verbose mode to reduce output)
 # imports
 <<<<<<< HEAD
 import os, random
@@ -9,6 +12,8 @@ import os, random
 >>>>>>> b567773 (stuff)
 =======
 =======
+=======
+>>>>>>> d0b24c3 (verbose mode to reduce output)
 import os
 import os.path
 >>>>>>> d69811d (Add files via upload)
@@ -42,19 +47,29 @@ import random
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # set verbose mode to increase output (messy)
 verbose_mode = False
 =======
 if(os.path.exists("./.env")):
 =======
+=======
+# set verbose mode to increase output (messy)
+verbose = False
+
+>>>>>>> 26695d5 (verbose mode to reduce output)
 if os.path.exists("./.env"):
 >>>>>>> 50654f5 (format with black)
     # load env variables
     load_dotenv()
 else:
+<<<<<<< HEAD
     print("No .env file found")
     exit()
 >>>>>>> 86a06e3 (Add files via upload)
+=======
+    exit("No .env file found. Read the README")
+>>>>>>> 26695d5 (verbose mode to reduce output)
 
 <<<<<<< HEAD
 if os.path.exists("./.env"):
@@ -391,6 +406,7 @@ def set_pixel_and_check_ratelimit(
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+<<<<<<< HEAD
     if verbose_mode:
         print("received response: ", response.text)
     # There are 2 different JSON keys for responses to get the next timestamp.
@@ -408,6 +424,9 @@ def set_pixel_and_check_ratelimit(
             ]
         )
         print("placing succeeded")
+=======
+<<<<<<< HEAD
+>>>>>>> 26695d5 (verbose mode to reduce output)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -443,6 +462,10 @@ def set_pixel_and_check_ratelimit(
 >>>>>>> df71c41 (Added simple threading example)
 =======
 =======
+=======
+    if verbose:
+        print("received response: ", response.text)
+>>>>>>> d0b24c3 (verbose mode to reduce output)
     # There are 2 different JSON keys for responses to get the next timestamp.
     # If we don't get data, it means we've been rate limited.
     # If we do, a pixel has been successfully placed.
@@ -630,13 +653,19 @@ def get_unset_pixel(boardimg, x, y):
             break;
 =======
             break
+<<<<<<< HEAD
 >>>>>>> 87cbded (format with black)
 
         print(x + pixel_x_start, y + pixel_y_start)
         print(x, y, "boardimg", image_width, image_height)
+=======
+        if verbose:
+            print(x + pixel_x_start, y + pixel_y_start)
+            print(x, y, "boardimg", image_width, image_height)
+>>>>>>> d0b24c3 (verbose mode to reduce output)
         target_rgb = pix[x, y]
         new_rgb = closest_color(target_rgb, rgb_colors_array)
-        if pix2[x + pixel_x_start, y + pixel_y_start] != new_rgb:
+        if pix2[x + pixel_x_start, y + pixel_y_start] != new_rgb and verbose:
             print(
                 pix2[x + pixel_x_start, y + pixel_y_start],
                 new_rgb,
@@ -1163,9 +1192,14 @@ repeat_forever = True
     for color_hex, color_index in color_map.items():
         rgb_array = ImageColor.getcolor(color_hex, "RGB")
         rgb_colors_array.append(rgb_array)
+<<<<<<< HEAD
 >>>>>>> 6683491 (Split code into functions for multithreading)
 
     print("available colors for palette (rgb): ", rgb_colors_array)
+=======
+    if verbose:
+        print("available colors for palette (rgb): ", rgb_colors_array)
+>>>>>>> d0b24c3 (verbose mode to reduce output)
 
 
 # method to read the input image.jpg file
@@ -1295,7 +1329,8 @@ def task(credentials_index):
                     headers={"User-agent": f"placebot{random.randint(1, 100000)}"},
                 )
 
-                print("received response: ", r.text)
+                if verbose:
+                    print("received response: ", r.text)
 
                 response_data = r.json()
                 access_tokens[credentials_index] = response_data["access_token"]
