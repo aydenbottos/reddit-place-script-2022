@@ -287,9 +287,8 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
         error_count += 1
         if error_count > error_limit:
             print("Some thing bad has happened, you've passed the error limit")
-            quit()
         print("that's probably not good",error_count,"error(s)")
-        print("next pixel in",((int(current_timestamp)-int(json.loads(response.text)['errors']['extensions']['nextAvailablePixelTs'])))/1000,"seconds")
+        print("next pixel in",((float(current_timestamp)-float(json.loads(response.text)['errors'][0]['extensions']['nextAvailablePixelTs'])/1000)),"seconds")
 
 def get_board(bearer):
     print("Getting board")
@@ -341,7 +340,7 @@ def get_unset_pixel(img):
     pix2 = img.convert('RGB').load()
     visited = []
     def fill(x,y,depth = 0):
-        if depth > 10 or (x,y) in visited:
+        if depth > 20 or (x,y) in visited:
             return
 
         visited.append((x,y))
@@ -351,7 +350,7 @@ def get_unset_pixel(img):
         if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
             #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
             if new_rgb != (69,42,0):
-                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb,"Used Fill method")
                 pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
                 return x, y
         else:
@@ -385,7 +384,7 @@ def get_unset_pixel(img):
             if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
                 #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
                 if new_rgb != (69,42,0):
-                    print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                    print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb,"Used printer method")
                     pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
                     break;
                 else:
@@ -454,5 +453,5 @@ while True:
 
             placing = True
 
-        time.sleep((pixel_place_frequency/len(accounts))+2)
+        time.sleep((pixel_place_frequency/len(accounts))+1)
     time.sleep(10)
