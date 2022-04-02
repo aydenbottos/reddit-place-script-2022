@@ -118,6 +118,7 @@ color_map = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # map of pixel color ids to verbose name (for debugging)
 name_map = {
     2: "Bright Red",
@@ -141,6 +142,31 @@ name_map = {
 =======
 =======
 >>>>>>> c0dfb14 (Split code into functions for multithreading)
+=======
+=======
+=======
+# map of pixel color ids to verbose name (for debugging)
+name_map = {
+    2: "Bright Red",
+    3: "Orange",
+    4: "Yellow",
+    6: "Dark Green",
+    8: "Light Green",
+    12: "Dark Blue",
+    13: "Blue",
+    14: "Cyan",
+    18: "Dark Purple",
+    19: "Purple",
+    23: "Pink",
+    25: "Brown",
+    27: "Black",
+    29: "Grey",
+    30: "Light Grey",
+    32: "White"
+}
+
+>>>>>>> ed52c90 (Add User Readable Color Names to Log Messages (#29))
+>>>>>>> fec2636 (Add User Readable Color Names to Log Messages (#29))
 # color palette
 rgb_colors_array = []
 
@@ -192,6 +218,7 @@ def rgb_to_hex(rgb):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Get a more verbose color indicator from a pixel color ID
 def color_id_to_name(color_id):
     if color_id in name_map.keys():
@@ -201,6 +228,15 @@ def color_id_to_name(color_id):
 
 =======
 >>>>>>> c0dfb14 (Split code into functions for multithreading)
+=======
+# Get a more verbose color indicator from a pixel color ID
+def color_id_to_name(color_id):
+    if color_id in name_map.keys():
+        return "{} ({})".format(name_map[color_id],str(color_id))
+    return "Invalid Color ({})".format(str(color_id))
+
+
+>>>>>>> fec2636 (Add User Readable Color Names to Log Messages (#29))
 # function to find the closest rgb color from palette to a target rgb color
 def closest_color(target_rgb, rgb_colors_array_in):
     r, g, b, a = target_rgb
@@ -374,7 +410,10 @@ def set_pixel_and_check_ratelimit(
     access_token_in, x, y, color_index_in=18, canvas_index=0
 ):
     print(
-        "placing pixel with color index " + str(color_index_in) + " at " + str((x, y))
+        "placing "
+        + color_id_to_name(color_index_in)
+        + " pixel at "
+        + str((x, y))
     )
 >>>>>>> aa7e04c (Fetch cooldown, formatting changes (#22))
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
