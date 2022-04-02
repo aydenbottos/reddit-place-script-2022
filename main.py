@@ -338,9 +338,9 @@ def get_unset_pixel(img):
     x = 0
     y= 0
     pix2 = img.convert('RGB').load()
-    visited = []
-    def fill(x,y,depth = 0):
+    def fill(x,y,depth = 0, visited = []):
         if depth > 20 or (x,y) in visited:
+            visited.append((x,y))
             return
 
         visited.append((x,y))
@@ -356,11 +356,13 @@ def get_unset_pixel(img):
         else:
             pass
         neighbors = [(x-1,y),(x+1,y),(x-1,y-1),(x+1,y+1),(x-1,y+1),(x+1,y-1),(x,y-1),(x,y+1)]
+        random.shuffle(neighbors)
         for n in neighbors:
             if 0 <= n[0] <= image_width-1 and 0 <= n[1] <= image_height-1:
-                r = fill(n[0],n[1],depth+1)
+                r = fill(n[0],n[1],depth+1, visited)
                 if r != None:
                     return r
+        return
 
     pos = fill(start_x, start_y, 0)
     if pos == None:
@@ -409,8 +411,10 @@ current_c = 0
 while True:
     placing = False
 
+    current = 0
     #does things
     for name, info in accounts.items():
+        current += 1
         current_timestamp = math.floor(time.time())
         get_valid_auth(name)
 
@@ -446,6 +450,8 @@ while True:
                 print(e)
 
             completeness(board)
+            print("\n")
+            printProgressBar(current,len(accounts),'Account Progress:','End', length = 50)
             print("\n")
 
             if not placing:
