@@ -35,6 +35,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a79b6e8 (Let black work on PRs)
         with:
           ref: ${{ github.head_ref }}
 
