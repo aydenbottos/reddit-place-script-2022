@@ -1198,11 +1198,22 @@ thread1.start()
 # get number of concurrent threads to start
 num_credentials = len(json.loads(os.getenv('ENV_PLACE_USERNAME')))
 
+# define delay between starting new threads
+delay_between_launches_seconds = 0
+
+# launch a thread for each account specified in .env
 for i in range(num_credentials):
     # run the image drawing task
     access_tokens.append(None)
     access_token_expires_at_timestamp.append(math.floor(time.time()))
     thread1 = threading.Thread(target=task, args=[i])
     thread1.start()
+<<<<<<< HEAD
 >>>>>>> 12ab83e (Added support for multiple threads)
+<<<<<<< HEAD
 >>>>>>> 3a4679a (Added support for multiple threads)
+=======
+=======
+    time.sleep(delay_between_launches_seconds)
+>>>>>>> 73075cf (Add delay between launching threads)
+>>>>>>> e886c12 (Add delay between launching threads)
