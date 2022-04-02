@@ -11,6 +11,8 @@ My Version of rdeepak2002's reddit bot, it's too different now to easily merge s
 - Multiple Account support (rdeepak2002 has it as well now)
 - Getting the current board image and only drawing what's necessary (rdeepak2002 has it as well now)
 - Transparency
+- Both canvases work now
+- All colors also work
 
 ## Requirements
 
