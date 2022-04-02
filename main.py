@@ -512,7 +512,9 @@ def get_board(access_token_in):
 
 def get_board(access_token_in):
     print("Getting board")
-    ws = create_connection("wss://gql-realtime-2.reddit.com/query")
+    ws = create_connection(
+        "wss://gql-realtime-2.reddit.com/query", origin="https://hot-potato.reddit.com"
+    )
     ws.send(
         json.dumps(
             {
