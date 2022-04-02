@@ -182,6 +182,15 @@ accounts = {
 
 # this is horrible, but i'm too lazy to make it not bad
 def fill_accounts():
+    print(len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
+        len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))),
+        len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))),
+        len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))
+
+    if len(json.loads(os.getenv('ENV_PLACE_USERNAME'))) != (len(json.loads(os.getenv('ENV_PLACE_USERNAME'))) + len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))) + len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))) + len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))/4:
+        print("Your .env file is messed up")
+        quit()
+
     i = 0
     for name in json.loads(os.getenv('ENV_PLACE_USERNAME')):
         account = {
@@ -520,6 +529,7 @@ while True:
                 current_c = 0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     # draw pixel onto screen
     if access_token is not None and current_timestamp >= last_time_placed_pixel + pixel_place_frequency:
         # get current pixel position from input image
@@ -827,5 +837,8 @@ for i in range(num_credentials):
 =======
         time.sleep(pixel_place_frequency/len(accounts))
 >>>>>>> 521a14b (Scuffed multi account support)
+=======
+        time.sleep((pixel_place_frequency/len(accounts))+2)
+>>>>>>> f48745b (Slight changes)
     time.sleep(10)
 >>>>>>> f1820df (fuck)
