@@ -281,7 +281,7 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
             print("Some thing bad has happened, you've passed the error limit")
             quit()
         print("that's probably not good",error_count,"error(s)")
-        print("next pixel in",(current_timestamp-int(current_timestampjson.loads(response.text)['errors']['extensions']['nextAvailablePixelTs']))/1000,"seconds")
+        print("next pixel in",(current_timestamp-int(json.loads(response.text)['errors']['extensions']['nextAvailablePixelTs']))/1000,"seconds")
 
 def get_board(bearer):
     print("Getting board")
@@ -311,9 +311,12 @@ def get_unset_pixel(img):
     x = 0
     y= 0
     pix2 = Image.open(img).convert('RGB').load()
+    visited = []
     def fill(x,y,depth = 0):
-        if depth > 30:
+        if depth > 10 or (x,y) in visited:
             return
+
+        visited.append((x,y))
         target_rgb = pix[x, y]
         new_rgb = closest_color(target_rgb, rgb_colors_array)
         #if the square is not the new color
@@ -323,6 +326,8 @@ def get_unset_pixel(img):
                 print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
                 pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
                 return x, y
+        else:
+            pass
         neighbors = [(x-1,y),(x+1,y),(x-1,y-1),(x+1,y+1),(x-1,y+1),(x+1,y-1),(x,y-1),(x,y+1)]
         for n in neighbors:
             if 0 <= n[0] <= image_width-1 and 0 <= n[1] <= image_height-1:
@@ -330,39 +335,43 @@ def get_unset_pixel(img):
                 if r != None:
                     return r
 
-    x, y = fill(start_x, start_y, 0)
-    while False: # Old code
-        x += 1
+    pos = fill(start_x, start_y, 0)
+    if pos == None:
+        everything_done = False
+        while True: # Old code
+            x += 1
 
-        if x >= image_width:
-            y += 1
-            x = 0
+            if x >= image_width:
+                y += 1
+                x = 0
 
-        if y >= image_height:
-            everything_done = True
-            x = 0
-            y = 0
+            if y >= image_height:
+                everything_done = True
+                x = 0
+                y = 0
 
-        #print(x+pixel_x_start,y+pixel_y_start)
-        #print(x, y,"img",image_width,image_height)
-        target_rgb = pix[x, y]
-        new_rgb = closest_color(target_rgb, rgb_colors_array)
-        if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
-            #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
-            if new_rgb != (69,42,0):
-                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
-                pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
-                break;
-            else:
-                pass#print("TransparrentPixel")
-        elif everything_done:
-            if new_rgb != (69,42,0):
-                print("Nothing to do")
-                time.sleep(30)
-                pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
-                break;
-            else:
-                pass#print("TransparrentPixel")
+            #print(x+pixel_x_start,y+pixel_y_start)
+            #print(x, y,"img",image_width,image_height)
+            target_rgb = pix[x, y]
+            new_rgb = closest_color(target_rgb, rgb_colors_array)
+            if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
+                #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
+                if new_rgb != (69,42,0):
+                    print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                    pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
+                    break;
+                else:
+                    pass#print("TransparrentPixel")
+            elif everything_done:
+                if new_rgb != (69,42,0):
+                    print("Nothing to do")
+                    time.sleep(30)
+                    pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
+                    break;
+                else:
+                    pass#print("TransparrentPixel")
+    else:
+        x,y = pos
     return x,y
 
 # current pixel row and pixel column being drawn
