@@ -282,8 +282,8 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
         'Content-Type': 'application/json'
     }
 
-    #print(requests_request("https://ipinfo.io/ip", headers=headers))
-    response = requests_request(url,"POST", headers=headers, data=payload, hops=1, retries=0)
+    #print(requests_request("https://ipinfo.io/ip", headers=headers, hops=2))
+    response = requests_request(url,"POST", headers=headers, data=payload, hops=2, retries=0)
 
     print(response)
     if 'errors' in json.loads(response):
