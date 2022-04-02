@@ -18,6 +18,7 @@ This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 - Detects existing matching pixels on the r/place map and skips them
 - Automatically converts colors to the r/place color palette
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 Script to draw an image onto r/place (https://www.reddit.com/r/place/)
 >>>>>>> 4a56f06 (Update README.md)
@@ -26,6 +27,8 @@ Script to draw an image onto r/place (<https://www.reddit.com/r/place/>)
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
 =======
 >>>>>>> c0a2c23 (Update README)
+=======
+>>>>>>> 5511077 (Update README)
 
 My Version of rdeepak2002's reddit bot, it's too different now to easily merge so i'm not going to bother, feel free to do it you're self though
 
@@ -34,6 +37,8 @@ My Version of rdeepak2002's reddit bot, it's too different now to easily merge s
 - Multiple Account support (rdeepak2002 has it as well now)
 - Getting the current board image and only drawing what's necessary (rdeepak2002 has it as well now)
 - Transparency
+=======
+>>>>>>> d1213bc (Update README)
 
 ## Requirements
 
