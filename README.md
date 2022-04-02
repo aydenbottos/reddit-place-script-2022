@@ -15,7 +15,7 @@ You need to generate an app client id and app secret key in order to use this sc
 Steps:
 
 1. Visit https://www.reddit.com/prefs/apps
-2. Click "create (another) app" button at very bottom 
+2. Click "create (another) app" button at very bottom
 3. Select the "script" option and fill in the fields with anything
 
 ## Python Package Requirements
@@ -33,10 +33,10 @@ Create a file called '.env'
 Put in the following content:
 
 ```text
-ENV_PLACE_USERNAME="developer_username"
-ENV_PLACE_PASSWORD="developer_password"
-ENV_PLACE_APP_CLIENT_ID="app_client_id"
-ENV_PLACE_SECRET_KEY="app_secret_key"
+ENV_PLACE_USERNAME=["username","username2"]
+ENV_PLACE_PASSWORD=["password","password2"]
+ENV_PLACE_APP_CLIENT_ID=["app_client_id","app_client_id2"]
+ENV_PLACE_SECRET_KEY=["app_secret_key","app_secret_key2"]
 ENV_DRAW_X_START="x_position_start_integer"
 ENV_DRAW_Y_START="y_position_start_integer"
 ```
