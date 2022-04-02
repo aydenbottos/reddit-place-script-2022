@@ -675,6 +675,7 @@ def get_unset_pixel(boardimg, x, y):
     pix2 = Image.open(boardimg).convert("RGB").load()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 87cbded (format with black)
 =======
     num_loops=0
@@ -682,6 +683,9 @@ def get_unset_pixel(boardimg, x, y):
 =======
     num_loops = 0
 >>>>>>> 8581a3a (Automatically format with Black)
+=======
+    num_loops=0
+>>>>>>> 48608c6 (Set values to 0 instead of canvas coordinates)
     while True:
         x += 1
 
@@ -733,6 +737,7 @@ def get_unset_pixel(boardimg, x, y):
 =======
             if num_loops > 1:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 target_rgb=pix[pixel_x_start,pixel_y_start]
                 new_rgb=closest_color(target_rgb, rgb_colors_array)
                 return pixel_x_start,pixel_y_start,new_rgb
@@ -746,6 +751,13 @@ def get_unset_pixel(boardimg, x, y):
             y = pixel_y_start
             num_loops += 1
 >>>>>>> 8581a3a (Automatically format with Black)
+=======
+                target_rgb=pix[0,0]
+                new_rgb=closest_color(target_rgb, rgb_colors_array)
+                return 0,0,new_rgb
+            y=0
+            num_loops+=1;
+>>>>>>> 48608c6 (Set values to 0 instead of canvas coordinates)
         if verbose_mode:
 >>>>>>> 8fa288e (maybe fix verbose mode going too fast)
             print(x + pixel_x_start, y + pixel_y_start)
