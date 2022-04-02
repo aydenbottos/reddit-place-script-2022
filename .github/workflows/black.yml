@@ -35,6 +35,7 @@ jobs:
       # Runs the code through Black
       - uses: piotrpawlaczek/python-blacken@release/stable
         with:
+<<<<<<< HEAD
           only-check: "no"
           line-length: "88"
           sanity-check: "safe"
@@ -48,3 +49,6 @@ jobs:
       # Runs the code through Black
       - uses: piotrpawlaczek/python-blacken@release/stable
 >>>>>>> 8305cf5 (GitHub Actions automatic linting)
+=======
+          only-check: 'no'
+>>>>>>> db29347 (automatically fix)
