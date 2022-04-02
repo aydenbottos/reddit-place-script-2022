@@ -207,7 +207,7 @@ def get_valid_auth(name):
 def completeness(img):
     x = 0
     y= 0
-    pix2 = Image.open(img).convert('RGB').load()
+    pix2 = img.convert('RGB').load()
     complete = 0
     while True:
         x += 1
@@ -281,7 +281,7 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
             print("Some thing bad has happened, you've passed the error limit")
             quit()
         print("that's probably not good",error_count,"error(s)")
-        print("next pixel in",(current_timestamp-int(json.loads(response.text)['errors']['extensions']['nextAvailablePixelTs']))/1000,"seconds")
+        print("next pixel in",((int(current_timestamp)-int(json.loads(response.text)['errors']['extensions']['nextAvailablePixelTs'])))/1000,"seconds")
 
 def get_board(bearer):
     print("Getting board")
@@ -290,27 +290,47 @@ def get_board(bearer):
     ws.recv()
     ws.send(json.dumps({"id":"1","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CONFIG"}}},"extensions":{},"operationName":"configuration","query":"subscription configuration($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on ConfigurationMessageData {\n          colorPalette {\n            colors {\n              hex\n              index\n              __typename\n            }\n            __typename\n          }\n          canvasConfigurations {\n            index\n            dx\n            dy\n            __typename\n          }\n          canvasWidth\n          canvasHeight\n          __typename\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
     ws.recv()
-    ws.send(json.dumps({"id":"2","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CANVAS","tag":"0"}}},"extensions":{},"operationName":"replace","query":"subscription replace($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on FullFrameMessageData {\n          __typename\n          name\n          timestamp\n        }\n        ... on DiffFrameMessageData {\n          __typename\n          name\n          currentTimestamp\n          previousTimestamp\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
 
-    file = ""
-    while True:
-        temp = json.loads(ws.recv())
-        if temp['type'] == 'data':
-            msg = temp['payload']['data']['subscribe']
-            if msg['data']['__typename'] == 'FullFrameMessageData':
-                file = msg['data']['name']
-                break;
+    image_sizex = 2
+    image_sizey = 1
+
+    imgs = []
+    already_added = []
+    for i in range(0, image_sizex*image_sizey):
+        ws.send(json.dumps({"id":str(2+i),"type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CANVAS","tag":str(i)}}},"extensions":{},"operationName":"replace","query":"subscription replace($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on FullFrameMessageData {\n          __typename\n          name\n          timestamp\n        }\n        ... on DiffFrameMessageData {\n          __typename\n          name\n          currentTimestamp\n          previousTimestamp\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
+        file = ""
+        while True:
+            temp = json.loads(ws.recv())
+            print("\n",temp)
+            if temp['type'] == 'data':
+                msg = temp['payload']['data']['subscribe']
+                if msg['data']['__typename'] == 'FullFrameMessageData':
+                    if not temp['id'] in already_added:
+                        imgs.append(Image.open(BytesIO(requests.get(msg['data']['name'], stream = True).content)))
+                        already_added.append(temp['id'])
+                    break;
+        ws.send(json.dumps({"id":str(2+i),"type":"stop"}))
+
     ws.close()
 
-    img = BytesIO(requests.get(file, stream = True).content)
+    print("\n\n", already_added)
+
+
+    new_im = Image.new('RGB', (1000*2, 1000))
+
+    x_offset = 0
+    for img in imgs:
+        new_im.paste(img, (x_offset,0))
+        x_offset += img.size[0]
+
     print("Got image:", file)
 
-    return img
+    return new_im
 
 def get_unset_pixel(img):
     x = 0
     y= 0
-    pix2 = Image.open(img).convert('RGB').load()
+    pix2 = img.convert('RGB').load()
     visited = []
     def fill(x,y,depth = 0):
         if depth > 10 or (x,y) in visited:
@@ -405,8 +425,16 @@ while True:
             print("\nAccount Placing: ",name,"\n")
 
             # draw the pixel onto r/place
+            #There's a better way to do this
+            canvas = 0
+            pixelx = pixel_x_start + r
+            pixely = pixel_y_start + c
+            while pixelx > 999:
+                pixelx -= 1000
+                canvas += 1
+
             try:
-                set_pixel(info['access_token'], pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+                set_pixel(info['access_token'], pixelx, pixely, pixel_color_index, canvas)
             except Exception as e:
                 print(e)
 
