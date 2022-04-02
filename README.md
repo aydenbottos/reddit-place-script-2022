@@ -6,6 +6,9 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c0a2c23 (Update README)
 This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 
 ## Features
@@ -14,12 +17,15 @@ This is a script to draw a JPG onto r/place (<https://www.reddit.com/r/place/>).
 - Determines the cooldown time remaining for each account
 - Detects existing matching pixels on the r/place map and skips them
 - Automatically converts colors to the r/place color palette
+<<<<<<< HEAD
 =======
 Script to draw an image onto r/place (https://www.reddit.com/r/place/)
 >>>>>>> 4a56f06 (Update README.md)
 =======
 Script to draw an image onto r/place (<https://www.reddit.com/r/place/>)
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
+=======
+>>>>>>> c0a2c23 (Update README)
 
 My Version of rdeepak2002's reddit bot, it's too different now to easily merge so i'm not going to bother, feel free to do it you're self though
 
@@ -32,11 +38,16 @@ My Version of rdeepak2002's reddit bot, it's too different now to easily merge s
 ## Requirements
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 - [Python 3](https://www.python.org/downloads/)
 - [A Reddit App Client ID and App Secret Key](https://www.reddit.com/prefs/apps)
 =======
 Python 3 (<https://www.python.org/downloads/>)
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
+=======
+- [Python 3](https://www.python.org/downloads/)
+- [A Reddit App Client ID and App Secret Key](https://www.reddit.com/prefs/apps)
+>>>>>>> c0a2c23 (Update README)
 
 ## How to Get App Client ID and App Secret Key
 
@@ -189,10 +200,14 @@ ENV_C_START='["0", "50"]'
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 The same pattern can be used for multiple drawing at once. Note that the "ENV_PLACE_USERNAME", "ENV_PLACE_PASSWORD", "ENV_PLACE_APP_CLIENT_ID", "ENV_PLACE_SECRET_KEY", "ENV_R_START", and "ENV_C_START" variables MUST be string arrays of the same size.
 =======
 The same pattern can be used for 3 or more threads drawing at once. Note that the "ENV_PLACE_USERNAME", "ENV_PLACE_PASSWORD", "ENV_PLACE_APP_CLIENT_ID", "ENV_PLACE_SECRET_KEY", "ENV_R_START", and "ENV_C_START" variables should all be string arrays of the same size.
 >>>>>>> 5cc71e0 (Update readme with instructions for multiple workers)
+=======
+The same pattern can be used for multiple drawing at once. Note that the "ENV_PLACE_USERNAME", "ENV_PLACE_PASSWORD", "ENV_PLACE_APP_CLIENT_ID", "ENV_PLACE_SECRET_KEY", "ENV_R_START", and "ENV_C_START" variables MUST be string arrays of the same size.
+>>>>>>> c0a2c23 (Update README)
 
 Also note that I did the following in the above example:
 
@@ -208,6 +223,7 @@ In this case, the first worker will start drawing from (0, 0) and the second wor
 This is useful if you want different threads drawing different parts of the image with different accounts.
 
 If you'd like, you can enable Verbose Mode by editing the Python file. This will output a lot more information, and not neccessarily in the right order, but it is useful for development and debugging.
+<<<<<<< HEAD
 =======
 In this case, the first worker will start drawing from (0, 0) and the second worker will start drawing from (0, 50) from the input image.jpg file. 
 
@@ -221,3 +237,5 @@ In this case, the first worker will start drawing from (0, 0) and the second wor
 
 This is useful if you want different threads drawing different parts of the image with different accounts.
 >>>>>>> 2118905 (Fetch cooldown, formatting changes (#22))
+=======
+>>>>>>> c0a2c23 (Update README)
