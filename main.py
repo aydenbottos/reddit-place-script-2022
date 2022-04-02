@@ -162,7 +162,7 @@ name_map = {
     27: "Black",
     29: "Grey",
     30: "Light Grey",
-    32: "White",
+    31: "White",
 }
 
 >>>>>>> ed52c90 (Add User Readable Color Names to Log Messages (#29))
