@@ -38,7 +38,6 @@ color_map = {
     "#FFFFFF": 31,  # white
 }
 
-
 def rgb_to_hex(rgb):
     return ('#%02x%02x%02x' % rgb).upper()
 
@@ -108,7 +107,7 @@ accounts = {
 
 # this is horrible, but i'm too lazy to make it not bad
 def fill_accounts():
-    print(len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
+    print("aaaa",len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
         len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))),
         len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))),
         len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))
@@ -178,6 +177,8 @@ def get_valid_auth(name):
 
 fill_accounts()
 
+error_count = 0
+error_limit = 10
 
 # method to draw a pixel at an x, y coordinate in r/place with a specific color
 def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
@@ -213,6 +214,12 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     print(response.text)
+    if 'errors' in json.loads(response.text):
+        error_count += 1
+        if error_count > error_limit:
+            print("Some thing bad has happened, you've passed the error limit")
+            quit()
+        print("that's probably not good",error_count,"error(s)")
 
 def get_board(bearer):
     print("Getting board")
@@ -297,7 +304,11 @@ while True:
             print("\nAccount Placing: ",name,"\n")
 
             # draw the pixel onto r/place
-            set_pixel(info['access_token'], pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+            try:
+                set_pixel(info['access_token'], pixel_x_start + r, pixel_y_start + c, pixel_color_index)
+            except Exception as e:
+                print(e)
+
             if not placing:
                 last_time_placed_pixel = math.floor(time.time())
 
