@@ -139,9 +139,14 @@ first_run_counter = 0
 =======
 =======
 # place a pixel immediately
+<<<<<<< HEAD
 first_run = True
 >>>>>>> e21509e (Added ability for script to place the first pixel immediately)
 
+=======
+# first_run = True
+first_run_counter = 0
+>>>>>>> 8050736 (Add counter to fix first run issue with multithreading)
 
 # function to convert rgb tuple to hexadecimal string
 >>>>>>> 6683491 (Split code into functions for multithreading)
@@ -1062,7 +1067,8 @@ def task(credentials_index):
         global access_token_expires_at_timestamp
 
         # boolean to place a pixel the moment the script is first run
-        global first_run
+        # global first_run
+        global first_run_counter
 
         # refresh auth tokens and / or draw a pixel
         while True:
@@ -1124,11 +1130,17 @@ def task(credentials_index):
 
             # draw pixel onto screen
             if access_tokens[credentials_index] is not None and (current_timestamp >= last_time_placed_pixel
+<<<<<<< HEAD
                                                                  + pixel_place_frequency or first_run):
                 
                 
+=======
+                                                                 + pixel_place_frequency
+                                                                 or first_run_counter <= credentials_index):
+>>>>>>> 0c9f07a (Add counter to fix first run issue with multithreading)
                 # place pixel immediately
-                first_run = False
+                # first_run = False
+                first_run_counter += 1
 
                 # get target color
                 target_rgb = pix[current_r, current_c]
