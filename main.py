@@ -20,7 +20,12 @@ from io import BytesIO
 from websocket import create_connection
 =======
 import threading
+<<<<<<< HEAD
 >>>>>>> 1b25969 (Added simple threading example)
+=======
+from io import BytesIO
+from websocket import create_connection
+>>>>>>> 04a6a3f (Merge codebase to avoid writing correct color tile)
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 from PIL import ImageColor
@@ -397,10 +402,17 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
 >>>>>>> 1b25969 (Added simple threading example)
 >>>>>>> df71c41 (Added simple threading example)
 
+<<<<<<< HEAD
 def get_board(bearer):
     print("Getting board")
     ws = create_connection("wss://gql-realtime-2.reddit.com/query")
     ws.send(json.dumps({"type":"connection_init","payload":{"Authorization":"Bearer "+bearer}}))
+=======
+def get_board(access_token_in):
+    print("Getting board")
+    ws = create_connection("wss://gql-realtime-2.reddit.com/query")
+    ws.send(json.dumps({"type":"connection_init","payload":{"Authorization":"Bearer "+ access_token_in}}))
+>>>>>>> 04a6a3f (Merge codebase to avoid writing correct color tile)
     ws.recv()
     ws.send(json.dumps({"id":"1","type":"start","payload":{"variables":{"input":{"channel":{"teamOwner":"AFD2022","category":"CONFIG"}}},"extensions":{},"operationName":"configuration","query":"subscription configuration($input: SubscribeInput!) {\n  subscribe(input: $input) {\n    id\n    ... on BasicMessage {\n      data {\n        __typename\n        ... on ConfigurationMessageData {\n          colorPalette {\n            colors {\n              hex\n              index\n              __typename\n            }\n            __typename\n          }\n          canvasConfigurations {\n            index\n            dx\n            dy\n            __typename\n          }\n          canvasWidth\n          canvasHeight\n          __typename\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"}}))
     ws.recv()
@@ -414,6 +426,7 @@ def get_board(bearer):
             if msg['data']['__typename'] == 'FullFrameMessageData':
                 file = msg['data']['name']
                 break;
+<<<<<<< HEAD
     ws.close()
 
     img = BytesIO(requests.get(file, stream = True).content)
@@ -426,6 +439,23 @@ def get_unset_pixel(img):
     y= 0
     pix2 = Image.open(img).convert('RGB').load()
     everything_done = False
+=======
+
+
+    ws.close()
+
+    boardimg = BytesIO(requests.get(file, stream = True).content)
+    print("Got image:", file)
+
+    return boardimg
+
+def get_unset_pixel(boardimg, x, y):
+    x = 0
+    y= 0
+    pixel_x_start = int(os.getenv('ENV_DRAW_X_START'))
+    pixel_y_start = int(os.getenv('ENV_DRAW_Y_START'))
+    pix2 = Image.open(boardimg).convert('RGB').load()
+>>>>>>> 04a6a3f (Merge codebase to avoid writing correct color tile)
     while True:
         x += 1
 
@@ -434,6 +464,7 @@ def get_unset_pixel(img):
             x = 0
 
         if y >= image_height:
+<<<<<<< HEAD
             time.sleep(30)
             everything_done = True
             x = 0
@@ -458,6 +489,21 @@ def get_unset_pixel(img):
                 break;
             else:
                 pass#print("TransparrentPixel")
+=======
+            break;
+
+        print(x+pixel_x_start,y+pixel_y_start)
+        print(x, y,"boardimg",image_width,image_height)
+        target_rgb = pix[x, y]
+        new_rgb = closest_color(target_rgb, rgb_colors_array)
+        if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
+            print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
+            if new_rgb != (69,42,0):
+                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                break;
+            else:
+                print("TransparrentPixel")
+>>>>>>> 04a6a3f (Merge codebase to avoid writing correct color tile)
     return x,y
 
 <<<<<<< HEAD
@@ -1079,6 +1125,8 @@ def task(credentials_index):
             # draw pixel onto screen
             if access_tokens[credentials_index] is not None and (current_timestamp >= last_time_placed_pixel
                                                                  + pixel_place_frequency or first_run):
+                
+                
                 # place pixel immediately
                 first_run = False
 
@@ -1089,6 +1137,10 @@ def task(credentials_index):
                 new_rgb = closest_color(target_rgb, rgb_colors_array)
                 new_rgb_hex = rgb_to_hex(new_rgb)
                 pixel_color_index = color_map[new_rgb_hex]
+
+                # get current pixel position from input image
+                current_r, current_c = get_unset_pixel(get_board(access_tokens[credentials_index]), pixel_x_start + current_r,
+                          pixel_y_start + current_c)
 
                 # draw the pixel onto r/place
                 set_pixel(access_tokens[credentials_index], pixel_x_start + current_r,
