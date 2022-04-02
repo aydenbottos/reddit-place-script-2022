@@ -182,6 +182,8 @@ error_limit = 10
 
 # method to draw a pixel at an x, y coordinate in r/place with a specific color
 def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
+    global error_count
+    global error_limit
     print("placing pixel")
 
     url = "https://gql-realtime-2.reddit.com/query"
@@ -249,6 +251,7 @@ def get_unset_pixel(img):
     x = 0
     y= 0
     pix2 = Image.open(img).convert('RGB').load()
+    everything_done = False
     while True:
         x += 1
 
@@ -257,7 +260,10 @@ def get_unset_pixel(img):
             x = 0
 
         if y >= image_height:
-            break;
+            time.sleep(30)
+            everything_done = True
+            x = 0
+            y = 0
 
         #print(x+pixel_x_start,y+pixel_y_start)
         #print(x, y,"img",image_width,image_height)
@@ -267,6 +273,13 @@ def get_unset_pixel(img):
             #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
             if new_rgb != (69,42,0):
                 print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
+                break;
+            else:
+                pass#print("TransparrentPixel")
+        elif everything_done:
+            if new_rgb != (69,42,0):
+                print("Nothing to do")
                 pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
                 break;
             else:

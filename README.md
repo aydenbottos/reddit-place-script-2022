@@ -6,10 +6,11 @@ Script to an image onto r/place (https://www.reddit.com/r/place/)
 
 My Version of rdeepak2002's reddit bot, it's too different now to easily merge so i'm not going to bother, feel free to do it you're self though
 
-Changes(From the originally forked version)
-Multiple Account support (rdeepak2002 has it as well now)
-Getting the current board image and only drawing what's necessary (rdeepak2002 waiting to be merged)
-Transparency 
+## Changes(From the originally forked version)
+
+- Multiple Account support (rdeepak2002 has it as well now)
+- Getting the current board image and only drawing what's necessary (rdeepak2002 has it as well now)
+- Transparency
 
 ## Requirements
 
@@ -48,7 +49,7 @@ ENV_DRAW_X_START="x_position_start_integer"
 ENV_DRAW_Y_START="y_position_start_integer"
 ```
 
-Change image.jpg to specify what image to draw. Note: one pixel is drawn every 5 minutes and only jpeg images are supported.
+Change unknown.png to specify what image to draw. Note: one pixel is drawn every 5 minutes per account
 
 ## Run the Script
 
