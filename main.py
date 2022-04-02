@@ -43,6 +43,7 @@ def rgb_to_hex(rgb):
 
 
 def closest_color(target_rgb, rgb_colors_array_in):
+    #print(target_rgb)
     r, g, b, a = target_rgb
     #print(r,g,b,a)
     if a < 255 or (r,g,b) == (69,42,0):
@@ -66,13 +67,16 @@ print("available colors (rgb): ", rgb_colors_array)
 image_path = os.path.join(os.path.abspath(os.getcwd()), 'unknown.png')
 im = Image.open(image_path)
 
-pix = im.load()
+pix = im.convert('RGBA').load()
 print("image size: ", im.size)  # Get the width and hight of the image for iterating over
 image_width, image_height = im.size
 
 # test drawing image to file called new_image before drawing to r/place
 current_r = 0
 current_c = 0
+pixels = 0
+
+start_x, start_y = (0, 0)
 
 while True:
     r = current_r
@@ -82,6 +86,10 @@ while True:
     new_rgb = closest_color(target_rgb, rgb_colors_array)
     # print("closest color: ", new_rgb)
     pix[r, c] = new_rgb
+    if new_rgb != (69,42,0):
+        if start_x == 0 and start_y == 0:
+            start_x, start_y = r, c
+        pixels += 1
 
     current_r += 1
 
@@ -141,6 +149,28 @@ current_timestamp = math.floor(time.time())
 #last_time_placed_pixel = math.floor(time.time())-310 # Uncomment to make start instantly
 access_token_expires_at_timestamp = math.floor(time.time())
 
+# Print iterations progress
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total:
+        print()
+
 def get_valid_auth(name):
     #print(name,accounts[name])
     #print(accounts[name]['access_token'] is None, current_timestamp >= accounts[name]['expires_at_timestamp'])
@@ -163,7 +193,7 @@ def get_valid_auth(name):
                           auth=HTTPBasicAuth(accounts[name]['app_client_id'], accounts[name]['secret_key']),
                           headers=headers)
 
-        print("received response: ", r.text)
+        #print("received response: ", r.text)
 
         response_data = r.json()
 
@@ -173,6 +203,34 @@ def get_valid_auth(name):
         accounts[name]['access_token_scope'] = response_data["scope"]  # this is usually "*"
 
         print("received new access token: ", accounts[name]['access_token'])
+
+def completeness(img):
+    x = 0
+    y= 0
+    pix2 = Image.open(img).convert('RGB').load()
+    complete = 0
+    while True:
+        x += 1
+
+        if x >= image_width:
+            y += 1
+            x = 0
+
+        if y >= image_height:
+            break;
+            x = 0
+            y = 0
+
+        target_rgb = pix[x, y]
+        new_rgb = closest_color(target_rgb, rgb_colors_array)
+        if pix2[x+pixel_x_start,y+pixel_y_start] == new_rgb:
+            #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
+            if new_rgb != (69,42,0):
+                complete += 1#print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                #pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
+            else:
+                pass#print("TransparrentPixel")
+    printProgressBar(complete,pixels,'Image Progress:','Complete', length = 50)
 
 
 fill_accounts()
@@ -215,13 +273,15 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    print(response.text)
+    #print(response.text)
     if 'errors' in json.loads(response.text):
+        print(response.text)
         error_count += 1
         if error_count > error_limit:
             print("Some thing bad has happened, you've passed the error limit")
             quit()
         print("that's probably not good",error_count,"error(s)")
+        print("next pixel in",(current_timestamp-int(current_timestampjson.loads(response.text)['errors']['extensions']['nextAvailablePixelTs']))/1000,"seconds")
 
 def get_board(bearer):
     print("Getting board")
@@ -251,8 +311,27 @@ def get_unset_pixel(img):
     x = 0
     y= 0
     pix2 = Image.open(img).convert('RGB').load()
-    everything_done = False
-    while True:
+    def fill(x,y,depth = 0):
+        if depth > 30:
+            return
+        target_rgb = pix[x, y]
+        new_rgb = closest_color(target_rgb, rgb_colors_array)
+        #if the square is not the new color
+        if pix2[x+pixel_x_start,y+pixel_y_start] != new_rgb:
+            #print(pix2[x+pixel_x_start,y+pixel_y_start], new_rgb,new_rgb != (69,42,0), pix2[x,y] != new_rgb)
+            if new_rgb != (69,42,0):
+                print("Different Pixel found at:",x+pixel_x_start,y+pixel_y_start,"With Color:",pix2[x+pixel_x_start,y+pixel_y_start],"Replacing with:",new_rgb)
+                pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
+                return x, y
+        neighbors = [(x-1,y),(x+1,y),(x-1,y-1),(x+1,y+1),(x-1,y+1),(x+1,y-1),(x,y-1),(x,y+1)]
+        for n in neighbors:
+            if 0 <= n[0] <= image_width-1 and 0 <= n[1] <= image_height-1:
+                r = fill(n[0],n[1],depth+1)
+                if r != None:
+                    return r
+
+    x, y = fill(start_x, start_y, 0)
+    while False: # Old code
         x += 1
 
         if x >= image_width:
@@ -260,7 +339,6 @@ def get_unset_pixel(img):
             x = 0
 
         if y >= image_height:
-            time.sleep(30)
             everything_done = True
             x = 0
             y = 0
@@ -280,6 +358,7 @@ def get_unset_pixel(img):
         elif everything_done:
             if new_rgb != (69,42,0):
                 print("Nothing to do")
+                time.sleep(30)
                 pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
                 break;
             else:
@@ -322,21 +401,13 @@ while True:
             except Exception as e:
                 print(e)
 
+            completeness(board)
+            print("\n")
+
             if not placing:
                 last_time_placed_pixel = math.floor(time.time())
 
-            current_r += 1
-            current_c += 1
-
-            # go back to first column when reached end of a row while drawing
-            if current_r >= image_width:
-                current_r = 0
             placing = True
-
-            # exit when all pixels drawn
-            if current_c >= image_height:
-                print("done drawing image to r/place")
-                current_c = 0
 
         time.sleep((pixel_place_frequency/len(accounts))+2)
     time.sleep(10)
