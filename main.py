@@ -366,9 +366,13 @@ def get_board(bearer):
     new_im = Image.new('RGB', (1000*image_sizex, 1000*image_sizey))
 
     x_offset = 0
+    y_offset = 0
     for img in imgs:
-        new_im.paste(img, (x_offset,0))
+        new_im.paste(img, (x_offset,y_offset))
         x_offset += img.size[0]
+        if x_offset >= img.size[0]*image_sizex:
+            x_offset = 0
+            y_offset += img.size[0]
 
     print("Got image:", file)
 
