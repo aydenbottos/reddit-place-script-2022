@@ -463,7 +463,9 @@ while True:
         get_valid_auth(name)
 
         # draw pixel onto screen
-        def place_pixel():# and (current_timestamp >= last_time_placed_pixel + pixel_place_frequency or placing):
+        def place_pixel(): # and (current_timestamp >= last_time_placed_pixel + pixel_place_frequency or placing):
+            global placing
+            global time_taken
             # get current pixel position from input image
 
             # this is probably really bad, and reddit will probably not like it
@@ -509,6 +511,7 @@ while True:
                 last_time_placed_pixel = math.floor(time.time())
 
             placing = True
+            #return 
 
         if info['access_token'] is not None:
             place_pixel()
