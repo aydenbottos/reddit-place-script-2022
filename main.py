@@ -447,6 +447,9 @@ def get_unset_pixel(img):
 current_r = 0
 current_c = 0
 
+def clamp(value, a, b):
+    return max(a, min(value, b))
+
 # loop to keep refreshing tokens when necessary and to draw pixels when the time is right
 while True:
     placing = False
