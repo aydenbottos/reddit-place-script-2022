@@ -434,8 +434,9 @@ def get_unset_pixel(img):
             elif everything_done:
                 if new_rgb != (69,42,0):
                     print("Nothing to do")
-                    time.sleep(30)
-                    pix2[x+pixel_x_start,y+pixel_y_start] = new_rgb
+                    x = -1
+                    y = -1
+                    time.sleep(120)
                     break;
                 else:
                     pass#print("TransparrentPixel")
@@ -462,7 +463,7 @@ while True:
         get_valid_auth(name)
 
         # draw pixel onto screen
-        if info['access_token'] is not None:# and (current_timestamp >= last_time_placed_pixel + pixel_place_frequency or placing):
+        def place_pixel():# and (current_timestamp >= last_time_placed_pixel + pixel_place_frequency or placing):
             # get current pixel position from input image
 
             # this is probably really bad, and reddit will probably not like it
@@ -470,6 +471,9 @@ while True:
             # Probably gonna rate limit your first account
             board = get_board(list(accounts.values())[0]['access_token'])
             r, c = get_unset_pixel(board)
+
+            if r == -1 and c == -1:
+                return
 
             target_rgb = pix[r, c]
             # get converted color
@@ -505,6 +509,9 @@ while True:
                 last_time_placed_pixel = math.floor(time.time())
 
             placing = True
+
+        if info['access_token'] is not None:
+            place_pixel()
         #print(time_taken)
         time.sleep(clamp(pixel_place_frequency/len(accounts)+1-time_taken, 1, 99999999))
     time.sleep(10)
