@@ -251,6 +251,7 @@ error_limit = 10
 
 # method to draw a pixel at an x, y coordinate in r/place with a specific color
 def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
+    now = time.time()
     global error_count
     global error_limit
     print("placing pixel")
@@ -287,12 +288,14 @@ def set_pixel(access_token_in, x, y, color_index_in=18, canvas_index=0):
 
     print(response)
     if 'errors' in json.loads(response):
-        print(response)
+        #print(response)
         error_count += 1
         if error_count > error_limit:
             print("Some thing bad has happened, you've passed the error limit")
         print("that's probably not good",error_count,"error(s)")
         print("next pixel in",((float(current_timestamp)-float(json.loads(response)['errors'][0]['extensions']['nextAvailablePixelTs'])/1000)),"seconds")
+
+    return time.time()-now
 
 def get_board(bearer):
     print("Getting board")
@@ -449,7 +452,7 @@ while True:
                 canvas += 1
 
             try:
-                set_pixel(info['access_token'], pixelx, pixely, pixel_color_index, canvas)
+                time_taken = set_pixel(info['access_token'], pixelx, pixely, pixel_color_index, canvas)
             except Exception as e:
                 print(e)
 
@@ -462,6 +465,6 @@ while True:
                 last_time_placed_pixel = math.floor(time.time())
 
             placing = True
-
-        time.sleep((pixel_place_frequency/len(accounts))+1)
+        #print(time_taken)
+        time.sleep((pixel_place_frequency/len(accounts))+1-time_taken)
     time.sleep(10)
