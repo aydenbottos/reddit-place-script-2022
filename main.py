@@ -159,10 +159,10 @@ accounts = {
 
 # this is horrible, but i'm too lazy to make it not bad
 def fill_accounts():
-    print("aaaa",len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
-        len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))),
-        len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))),
-        len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))
+    print("Usernames:",len(json.loads(os.getenv('ENV_PLACE_USERNAME'))),
+        "Passwords:",len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))),
+        "Client IDs:",len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))),
+        "Secret Keys:",len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))
 
     if len(json.loads(os.getenv('ENV_PLACE_USERNAME'))) != (len(json.loads(os.getenv('ENV_PLACE_USERNAME'))) + len(json.loads(os.getenv('ENV_PLACE_PASSWORD'))) + len(json.loads(os.getenv('ENV_PLACE_APP_CLIENT_ID'))) + len(json.loads(os.getenv('ENV_PLACE_SECRET_KEY'))))/4:
         print("Your .env file is messed up")
@@ -511,7 +511,7 @@ while True:
                 last_time_placed_pixel = math.floor(time.time())
 
             placing = True
-            #return 
+            #return
 
         if info['access_token'] is not None:
             place_pixel()
