@@ -23,6 +23,7 @@ pixel_y_start = int(os.getenv('ENV_DRAW_Y_START'))
 
 # map of colors for pixels you can place
 color_map = {
+    "#6D001A": 0,  # put color here
     "#BE0039": 1,  # put color here
     "#FF4500": 2,  # bright red
     "#FFA800": 3,  # orange
@@ -32,21 +33,53 @@ color_map = {
     "#7EED56": 8,  # lighter green
     "#00756F": 9,  # put color here
     "#009EAA": 10,  # put color here
+    "#00CCC0": 11,  # put color here
     "#2450A4": 12,  # darkest blue
     "#3690EA": 13,  # medium normal blue
     "#51E9F4": 14,  # cyan
     "#493AC1": 15,  # put color here
     "#6A5CFF": 16,  # put color here
+    "#94B3FF": 17,  # put color here
     "#811E9F": 18,  # darkest purple
     "#B44AC0": 19,  # normal purple
+    "#E4ABFF": 20,  # put color here
+    "#DE107F": 21,  # put color here
     "#FF3881": 22,  # put color here
     "#FF99AA": 23,  # pink
     "#6D482F": 24,  # put color here
     "#9C6926": 25,  # brown
+    "#FFB470": 26,  # put color here
     "#000000": 27,  # black
+    "#515252": 28,  # put color here
     "#898D90": 29,  # grey
     "#D4D7D9": 30,  # light grey
     "#FFFFFF": 31,  # white
+}
+NAME_MAP = {
+        1: "Dark Red",
+        2: "Bright Red",
+        3: "Orange",
+        4: "Yellow",
+        6: "Dark Green",
+        7: "Green",
+        8: "Light Green",
+        9: "Dark Teal",
+        10: "Teal",
+        12: "Dark Blue",
+        13: "Blue",
+        14: "Light Blue",
+        15: "Indigo",
+        16: "Periwinkle",
+        18: "Dark Purple",
+        19: "Purple",
+        22: "Pink",
+        23: "Light Pink",
+        24: "Dark Brown",
+        25: "Brown",
+        27: "Black",
+        29: "Gray",
+        30: "Light Gray",
+        31: "White",
 }
 
 def rgb_to_hex(rgb):
@@ -306,7 +339,7 @@ def get_board(bearer):
     ws.recv()
 
     image_sizex = 2
-    image_sizey = 1
+    image_sizey = 2
 
     imgs = []
     already_added = []
@@ -330,7 +363,7 @@ def get_board(bearer):
     #print("\n\n", already_added)
 
 
-    new_im = Image.new('RGB', (1000*2, 1000))
+    new_im = Image.new('RGB', (1000*image_sizex, 1000*image_sizey))
 
     x_offset = 0
     for img in imgs:
