@@ -467,7 +467,8 @@ while True:
 
             # this is probably really bad, and reddit will probably not like it
             # I need to update this to be better, but i am lazy
-            board = get_board(info['access_token'])
+            # Probably gonna rate limit your first account
+            board = get_board(list(accounts.values())[0]['access_token'])
             r, c = get_unset_pixel(board)
 
             target_rgb = pix[r, c]
