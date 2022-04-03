@@ -486,6 +486,9 @@ while True:
             while pixelx > 999:
                 pixelx -= 1000
                 canvas += 1
+            while pixely > 999:
+                pixely -= 1000
+                canvas += 2
 
             try:
                 time_taken = set_pixel(info['access_token'], pixelx, pixely, pixel_color_index, canvas)
