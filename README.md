@@ -13,6 +13,7 @@ My Version of rdeepak2002's reddit bot, it's too different now to easily merge s
 - Transparency
 - Both canvases work now
 - All colors also work
+- A Proxy using torpy (only for placing the pixel at the moment)
 
 ## Requirements
 
