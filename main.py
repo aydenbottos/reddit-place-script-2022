@@ -505,5 +505,5 @@ while True:
 
             placing = True
         #print(time_taken)
-        time.sleep(clamp(pixel_place_frequency/len(accounts))+1-time_taken, 1, 99999999)
+        time.sleep(clamp(pixel_place_frequency/len(accounts)+1-time_taken, 1, 99999999))
     time.sleep(10)
