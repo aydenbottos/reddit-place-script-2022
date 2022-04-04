@@ -475,7 +475,13 @@ while True:
             # this is probably really bad, and reddit will probably not like it
             # I need to update this to be better, but i am lazy
             # Probably gonna rate limit your first account
-            board = get_board(list(accounts.values())[0]['access_token'])
+            try:
+                board = get_board(list(accounts.values())[0]['access_token'])
+            except Exception as e:
+                return
+                print(e)
+
+
             r, c = get_unset_pixel(board)
 
             if r == -1 and c == -1:
@@ -505,6 +511,7 @@ while True:
                 time_taken = set_pixel(info['access_token'], pixelx, pixely, pixel_color_index, canvas)
             except Exception as e:
                 print(e)
+                return
 
             completeness(board)
             print("\n")
